@@ -1,4 +1,2 @@
 print('Hello Python')
-#test
-#paper
-#Phum
+#หิวข้าว
