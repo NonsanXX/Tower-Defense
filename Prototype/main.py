@@ -16,6 +16,7 @@ screen = pygame.display.set_mode((c.SCREEN_WIDTH + c.SIDE_PANEL, c.SCREEN_HEIGHT
 pygame.display.set_caption("WOTD")
 
 # game variable
+is_fast_forward = False
 game_over = False
 game_outcome = 0 # -1 lost and 1 is win
 level_started = False
@@ -129,7 +130,7 @@ cancel_button = Button(c.SCREEN_WIDTH + 50, 180, cancel_turret_image, True)
 upgrade_button = Button(c.SCREEN_HEIGHT + 5, 180, upgrade_turret_image, True)
 begin_button = Button(c.SCREEN_HEIGHT + 60, 300, begin_image, True)
 restart_button = Button(310, 300, restart_image, True)
-fast_forward_button = Button(c.SCREEN_HEIGHT + 60, 300, fast_forward_image, False)
+fast_forward_button = Button(c.SCREEN_HEIGHT + 60, 300, fast_forward_image, True)
 
 run = True
 
@@ -139,7 +140,10 @@ while run:
     #####################
     # UPDATING SECTION
     #####################
-
+    if is_fast_forward:
+        world.game_speed = 2
+    else:
+        world.game_speed = 1
     if not game_over:
         # check if player is lost
         if world.health <= 0:
@@ -172,13 +176,14 @@ while run:
     if not game_over:
         # check if level started
         if not level_started:
+            time_begin = pygame.time.get_ticks()
             if begin_button.draw(screen):
                 level_started = True
         else:
             # Fast forward option
-            world.game_speed = 1
-            if fast_forward_button.draw(screen):
-                world.game_speed = 2
+            if pygame.time.get_ticks() - time_begin > 100:
+                if fast_forward_button.draw(screen):
+                    is_fast_forward = not is_fast_forward
             # Spawn enemies
             if pygame.time.get_ticks() - last_enemy_spawn > c.SPAWN_COOLDOWN / world.game_speed:
                 if world.spawned_enemy < len(world.enemy_list):
