@@ -104,6 +104,13 @@ ENEMY_SPAWN_DATA = [
         "medium" : 25,
         "strong" : 25,
         "elite" : 25
+    },
+    {
+        #wave 16 (END)
+        "weak": 0,
+        "medium": 0,
+        "strong": 0,
+        "elite": 0,
     }
 ]
 
