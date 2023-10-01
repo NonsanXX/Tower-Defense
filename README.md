@@ -1,5 +1,9 @@
 # "World of Tower Defense" Pygame Projects
 
+## Requirement
+1. Install pygame with [`pip`](https://pypi.org/project/pygame/)
+    + `$ pip install pygame`
+
 ## Collaborators
   66070305 ภูริภัทร อรุณไพศาล - Head<br>
   66070162 ภูมิภูริดล วงค์จันทร์ - Sub Header<br>
