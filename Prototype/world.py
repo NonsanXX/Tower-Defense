@@ -1,7 +1,7 @@
 import pygame
 from enemy_data import ENEMY_SPAWN_DATA
 from random import shuffle
-import constant as c
+import config as c
 class World():
     def __init__(self, data, map_image):
         self.level = 1

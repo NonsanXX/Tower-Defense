@@ -1,5 +1,5 @@
 import pygame
-import constant as c
+import config as c
 from turret_data import TURRET_DATA
 import math
 class Turret(pygame.sprite.Sprite):

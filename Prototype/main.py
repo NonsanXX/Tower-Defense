@@ -1,5 +1,5 @@
 import pygame
-import constant as c
+import config as c
 import json
 from enemy import Enemy
 from world import World
@@ -75,7 +75,7 @@ def display_data():
     screen.blit(logo_gui, (c.SCREEN_WIDTH, 400))
 
     #display data
-    draw_text("LEVEL: %d"%world.level, text_font, "grey100", (c.SCREEN_WIDTH + 10, 10))
+    draw_text("WAVE: %d"%world.level, text_font, "grey100", (c.SCREEN_WIDTH + 10, 10))
     screen.blit(heart_gui, (c.SCREEN_WIDTH + 10, 35))
     draw_text(str(world.health), text_font, "grey100", (c.SCREEN_WIDTH + 50, 40))
     screen.blit(coin_gui, (c.SCREEN_WIDTH + 10, 65))
