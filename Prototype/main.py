@@ -17,6 +17,7 @@ pygame.display.set_caption("WOTD")
 
 # game variable
 is_fast_forward = False
+current_fast_forward_type = 1
 game_over = False
 game_outcome = 0 # -1 lost and 1 is win
 level_started = False
@@ -32,7 +33,10 @@ cancel_turret_image = pygame.image.load(os.path.join("Prototype", "assets", "ima
 upgrade_turret_image = pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "upgrade_turret.png"))
 begin_image = pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "begin.png"))
 restart_image = pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "restart.png"))
-fast_forward_image = pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "fast_forward.png"))
+fast_forward_cancel_image = pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "FFW_cancel.png"))
+fast_forward_x3_image = pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "FFW_X3.png"))
+fast_forward_x5_image = pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "FFW_X5.png"))
+
 # load gui
 coin_gui = pygame.image.load(os.path.join("Prototype", "assets", "images", "gui", "coin.png"))
 heart_gui = pygame.image.load(os.path.join("Prototype", "assets", "images", "gui", "heart.png"))
@@ -75,7 +79,7 @@ def display_data():
     screen.blit(logo_gui, (c.SCREEN_WIDTH, 400))
 
     #display data
-    draw_text("WAVE: %d"%world.level, text_font, "grey100", (c.SCREEN_WIDTH + 10, 10))
+    draw_text("LEVEL: %d"%world.level, text_font, "grey100", (c.SCREEN_WIDTH + 10, 10))
     screen.blit(heart_gui, (c.SCREEN_WIDTH + 10, 35))
     draw_text(str(world.health), text_font, "grey100", (c.SCREEN_WIDTH + 50, 40))
     screen.blit(coin_gui, (c.SCREEN_WIDTH + 10, 65))
@@ -130,8 +134,9 @@ cancel_button = Button(c.SCREEN_WIDTH + 50, 180, cancel_turret_image, True)
 upgrade_button = Button(c.SCREEN_HEIGHT + 5, 180, upgrade_turret_image, True)
 begin_button = Button(c.SCREEN_HEIGHT + 60, 300, begin_image, True)
 restart_button = Button(310, 300, restart_image, True)
-fast_forward_button = Button(c.SCREEN_HEIGHT + 60, 300, fast_forward_image, True)
-
+fast_forward_cancel_button = Button(c.SCREEN_HEIGHT + 50, 300, fast_forward_cancel_image, True)
+fast_forward_x3_button = Button(c.SCREEN_HEIGHT + 120, 300, fast_forward_x3_image, True)
+fast_forward_x5_button = Button(c.SCREEN_HEIGHT + 190, 300, fast_forward_x5_image, True)
 run = True
 
 while run:
@@ -140,10 +145,7 @@ while run:
     #####################
     # UPDATING SECTION
     #####################
-    if is_fast_forward:
-        world.game_speed = 2
-    else:
-        world.game_speed = 1
+    world.game_speed = current_fast_forward_type
     if not game_over:
         # check if player is lost
         if world.health <= 0:
@@ -181,9 +183,13 @@ while run:
                 level_started = True
         else:
             # Fast forward option
-            if pygame.time.get_ticks() - time_begin > 100:
-                if fast_forward_button.draw(screen):
-                    is_fast_forward = not is_fast_forward
+            if pygame.time.get_ticks() - time_begin > 100: # Check if delta time is greater than 100ms
+                if fast_forward_cancel_button.draw(screen):
+                    current_fast_forward_type = 1
+                if fast_forward_x3_button.draw(screen):
+                    current_fast_forward_type = 3
+                if fast_forward_x5_button.draw(screen):
+                    current_fast_forward_type = 5
             # Spawn enemies
             if pygame.time.get_ticks() - last_enemy_spawn > c.SPAWN_COOLDOWN / world.game_speed:
                 if world.spawned_enemy < len(world.enemy_list):
