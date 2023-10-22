@@ -53,6 +53,14 @@ enemy_images = {
     "elite" : pygame.image.load(os.path.join("Prototype", "assets", "images", "enemies", "enemy_4.png"))
 }
 
+witch_level = len(list(os.scandir(os.path.join("Prototype", "assets", "images", "turrets", "Witch"))))
+witch_frame = lambda x: len(list(os.scandir(os.path.join("Prototype", "assets", "images", "turrets", "Witch", "Lv%d"%x))))
+
+# witch tower
+witch_spreadsheet = [["Prototype/asstes/images/turrets/Witch/Lv%d/Witch%d-%d.png"%(level, level, frame) for frame in range(1, witch_frame(level)+1)] for level in range(1, witch_level+1)]
+print(witch_spreadsheet[0])
+
+
 # turret sprite sheet # turret animation
 turret_spreadsheet = []
 for x in range(1, c.TURRET_LEVEL+1):
