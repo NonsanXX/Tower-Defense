@@ -9,7 +9,7 @@ MONEY = 650
 TOTAL_LEVEL = 15
 
 # Enemy const
-SPAWN_COOLDOWN = 400
+SPAWN_COOLDOWN = 1200
 
 # Turret const
 TURRET_LEVEL = 3
