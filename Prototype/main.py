@@ -103,7 +103,7 @@ def create_turret(pos, choosing_turret, turret_name):
     mouse_tile_y = pos[1] // c.TILE_SIZE
     # calculate sequence in json tile_map
     mouse_tile_num = (mouse_tile_y * c.COLS) + mouse_tile_x
-    if world.tile_map[mouse_tile_num] == 7:
+    if world.tile_map[mouse_tile_num] == 0:
         # check if already placed
         space_is_free = True
         for turret in turret_group:
