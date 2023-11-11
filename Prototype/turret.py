@@ -76,7 +76,7 @@ class Turret(pygame.sprite.Sprite):
                     
                     # Damage enemy
                     self.target.health -= self.damage
-                    if self.name != "knight":
+                    if self.name != "knight": # AOE attack
                         break
     def play_animation(self):
         # update

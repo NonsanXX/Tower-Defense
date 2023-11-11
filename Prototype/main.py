@@ -27,8 +27,6 @@ selected_turret = False
 
 # load image
 map_image = pygame.image.load(os.path.join("Prototype", "levels", "level.png"))
-cursor_turret = pygame.image.load(os.path.join("Prototype", "assets", "images", "turrets", "cursor_turret.png"))
-buy_turret_image = pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "buy_turret.png"))
 cancel_turret_image = pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "cancel.png"))
 upgrade_turret_image = pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "upgrade_turret.png"))
 begin_image = pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "begin.png"))
@@ -142,7 +140,6 @@ world.process_enemy()
 waypoint = world.waypoint
 
 # create button
-turret_button = Button(c.SCREEN_WIDTH + 30, 120, buy_turret_image, True)
 cancel_button = Button(c.SCREEN_WIDTH + 50, 180, cancel_turret_image, True)
 upgrade_button = Button(c.SCREEN_HEIGHT + 5, 180, upgrade_turret_image, True)
 begin_button = Button(c.SCREEN_HEIGHT + 60, 300, begin_image, True)
@@ -237,8 +234,6 @@ while run:
         if elf_selector.draw(screen):
             placing_turret = True
             select = (selector["elf"], "elf")
-        if turret_button.draw(screen):
-            placing_turret = True
         if placing_turret:
             # show cursor
             cursor_turret = pygame.transform.scale(select[0][0][0], (99, 99))
