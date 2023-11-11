@@ -53,11 +53,24 @@ enemy_images = {
     "elite" : pygame.image.load(os.path.join("Prototype", "assets", "images", "enemies", "enemy_4.png"))
 }
 
-witch_level = len(list(os.scandir(os.path.join("Prototype", "assets", "images", "turrets", "Witch"))))
 witch_frame = lambda x: len(list(os.scandir(os.path.join("Prototype", "assets", "images", "turrets", "Witch", "Lv%d"%x))))
+knight_frame = lambda x: len(list(os.scandir(os.path.join("Prototype", "assets", "images", "turrets", "Knight", "Lv%d"%x))))
+elf_frame = lambda x: len(list(os.scandir(os.path.join("Prototype", "assets", "images", "turrets", "Elf", "Lv%d"%x))))
 
 # witch tower
-turret_spreadsheet = [[pygame.image.load(os.path.join("Prototype", "assets", "images", "turrets", "Witch", "Lv%d"%level, "Witch%d-%d.png"%(level, frame))) for frame in range(1, witch_frame(level)+1)] for level in range(1, witch_level+1)]
+witch_spreadsheet = [[pygame.image.load(os.path.join("Prototype", "assets", "images", "turrets", "Witch", "Lv%d"%level, "Witch%d-%d.png"%(level, frame))) for frame in range(1, witch_frame(level)+1)] for level in range(1, 4)]
+
+# knight tower
+knight_spreadsheet = [[pygame.image.load(os.path.join("Prototype", "assets", "images", "turrets", "Knight", "Lv%d"%level, "Knight%d-%d.png"%(level, frame))) for frame in range(1, knight_frame(level)+1)] for level in range(1, 4)]
+
+# elf tower
+elf_spreadsheet = [[pygame.image.load(os.path.join("Prototype", "assets", "images", "turrets", "Elf", "Lv%d"%level, "Elf%d-%d.png"%(level, frame))) for frame in range(1, elf_frame(level)+1)] for level in range(1, 4)]
+
+selector = {
+    "witch" : witch_spreadsheet,
+    "knight" : knight_spreadsheet,
+    "elf" : elf_spreadsheet
+}
 
 # load json data
 with open(os.path.join("Prototype", "levels", "level.tmj")) as file:
@@ -87,7 +100,7 @@ def display_data():
     
 
 
-def create_turret(pos):
+def create_turret(pos, choosing_turret, turret_name):
     mouse_tile_x = pos[0] // c.TILE_SIZE
     mouse_tile_y = pos[1] // c.TILE_SIZE
     # calculate sequence in json tile_map
@@ -99,7 +112,7 @@ def create_turret(pos):
             if (mouse_tile_x, mouse_tile_y) == (turret.tile_x, turret.tile_y):
                 space_is_free = False
         if space_is_free:
-            new_turret = Turret(turret_spreadsheet, mouse_tile_x, mouse_tile_y, shot_fx)
+            new_turret = Turret(choosing_turret, mouse_tile_x, mouse_tile_y, shot_fx, turret_name)
             turret_group.add(new_turret)
 
             # losing money
@@ -137,6 +150,9 @@ restart_button = Button(310, 300, restart_image, True)
 fast_forward_cancel_button = Button(c.SCREEN_HEIGHT + 50, 300, fast_forward_cancel_image, True)
 fast_forward_x3_button = Button(c.SCREEN_HEIGHT + 120, 300, fast_forward_x3_image, True)
 fast_forward_x5_button = Button(c.SCREEN_HEIGHT + 190, 300, fast_forward_x5_image, True)
+witch_selector = Button(0, 0, pygame.transform.scale(witch_spreadsheet[0][0], (99, 99)), True)
+knight_selector = Button(0, 100, pygame.transform.scale(knight_spreadsheet[0][0], (99, 99)), True)
+elf_selector = Button(0, 200, pygame.transform.scale(elf_spreadsheet[0][0], (99, 99)), True)
 run = True
 
 while run:
@@ -212,11 +228,20 @@ while run:
         # for turret button show cost
         draw_text(str(c.BUY_COST), text_font, "grey100", (c.SCREEN_WIDTH + 215, 135))
         screen.blit(coin_gui, (c.SCREEN_WIDTH + 260, 130))
+        if witch_selector.draw(screen):
+            placing_turret = True
+            select = (selector["witch"], "witch")
+        if knight_selector.draw(screen):
+            placing_turret = True
+            select = (selector["knight"], "knight")
+        if elf_selector.draw(screen):
+            placing_turret = True
+            select = (selector["elf"], "elf")
         if turret_button.draw(screen):
             placing_turret = True
-
         if placing_turret:
             # show cursor
+            cursor_turret = pygame.transform.scale(select[0][0][0], (99, 99))
             cursor_rect = cursor_turret.get_rect()
             cursor_pos = pygame.mouse.get_pos()
             cursor_rect.center = cursor_pos
@@ -274,7 +299,7 @@ while run:
                 if placing_turret:
                     # if have enough money
                     if world.money >= c.BUY_COST:
-                        create_turret(mouse_pos)
+                        create_turret(mouse_pos, select[0], select[1])
                 else:
                     selected_turret = select_turret(mouse_pos)
     pygame.display.update()
