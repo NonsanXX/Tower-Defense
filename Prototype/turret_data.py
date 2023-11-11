@@ -42,7 +42,7 @@ TURRETS_DATA = {
     "elf" : [
         {
             #1
-            "range" : 150,
+            "range" : 500,
             "cooldown" : 1500,
             "damage" : 25
         },

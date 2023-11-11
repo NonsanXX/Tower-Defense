@@ -46,7 +46,7 @@ class Turret(pygame.sprite.Sprite):
 
     def load_image(self, sprite_sheet):
         # to extract image from spritesheet
-        animation_list = [pygame.transform.scale(frame, (200, 200)) for frame in sprite_sheet]
+        animation_list = [pygame.transform.scale(frame, (225, 225)) for frame in sprite_sheet]
         
         return animation_list
     
