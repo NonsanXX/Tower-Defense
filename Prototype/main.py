@@ -24,21 +24,23 @@ level_started = False
 last_enemy_spawn = pygame.time.get_ticks()
 placing_turret = False
 selected_turret = False
+buttoning = False
 
 # load image
 map_image = pygame.image.load(os.path.join("Prototype", "levels", "level.png"))
-cancel_turret_image = pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "cancel.png"))
+cancel_turret_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "cancel.png")), (99, 99))
 upgrade_turret_image = pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "upgrade_turret.png"))
 begin_image = pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "begin.png"))
 restart_image = pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "restart.png"))
-fast_forward_cancel_image = pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "FFW_cancel.png"))
-fast_forward_x3_image = pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "FFW_X3.png"))
-fast_forward_x5_image = pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "FFW_X5.png"))
+fast_forward_cancel_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "FFW_cancel.png")), (99, 55))
+fast_forward_x3_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "FFW_X3.png")), (99, 55))
+fast_forward_x5_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "FFW_X5.png")), (99, 55))
 
 # load gui
 coin_gui = pygame.image.load(os.path.join("Prototype", "assets", "images", "gui", "coin.png"))
 heart_gui = pygame.image.load(os.path.join("Prototype", "assets", "images", "gui", "heart.png"))
 logo_gui = pygame.image.load(os.path.join("Prototype", "assets", "images", "gui", "logo.png"))
+
 #load sound
 shot_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "shot.wav"))
 shot_fx.set_volume(0.5)
@@ -82,21 +84,19 @@ large_font = pygame.font.SysFont("Consolas", 36)
 def draw_text(text, font, color, coor):
     img = font.render(text, True, color)
     screen.blit(img, coor)
+def draw_center_text(text, font, color, eneble, coor):
+    img = font.render(text, True, color)
+    img_rect = img.get_rect(center=(c.SCREEN_WIDTH/2, c.SCREEN_HEIGHT/2))
+    screen.blit(img, (img_rect.x*eneble[0]+coor[0], img_rect.y*eneble[1]+coor[1]))
 
 def display_data():
-    # draw panel
-    pygame.draw.rect(screen, "maroon", (c.SCREEN_WIDTH, 0, c.SIDE_PANEL, c.SCREEN_HEIGHT))
-    pygame.draw.rect(screen, "grey0", (c.SCREEN_WIDTH, 0, c.SIDE_PANEL, 400), 2)
-    screen.blit(logo_gui, (c.SCREEN_WIDTH, 400))
-
     #display data
-    draw_text("LEVEL: %d"%world.level, text_font, "grey100", (c.SCREEN_WIDTH + 10, 10))
-    screen.blit(heart_gui, (c.SCREEN_WIDTH + 10, 35))
-    draw_text(str(world.health), text_font, "grey100", (c.SCREEN_WIDTH + 50, 40))
-    screen.blit(coin_gui, (c.SCREEN_WIDTH + 10, 65))
-    draw_text(str(world.money), text_font, "grey100", (c.SCREEN_WIDTH + 50, 70))
-    
+    screen.blit(heart_gui, (10, c.SCREEN_HEIGHT-50))
+    draw_text(str(world.health), text_font, "grey100", (60, c.SCREEN_HEIGHT-45))
+    screen.blit(coin_gui, (10, 10))
+    draw_text(str(world.money), text_font, "grey100", (60, 15))
 
+    draw_center_text("WAVE %s"%(world.level), large_font, "grey100", (1, 0), (0, 10))
 
 def create_turret(pos, choosing_turret, turret_name):
     mouse_tile_x = pos[0] // c.TILE_SIZE
@@ -127,6 +127,16 @@ def deselect_turret():
     for turret in turret_group:
         turret.selected = False
 
+def draw_slot(rect):
+    pygame.draw.rect(screen, (217, 217, 217), rect, border_radius=25)
+    pygame.draw.rect(screen, (0, 0, 0), rect, 2, 25)
+
+def nondeselect(ignore):
+    mouse_pos = pygame.mouse.get_pos()
+    for button in ignore:
+        if button.rect.collidepoint(mouse_pos):
+            return True
+
 #create group
 enemy_group = pygame.sprite.Group()
 turret_group = pygame.sprite.Group()
@@ -136,20 +146,24 @@ world = World(world_data, map_image)
 world.process_data()
 world.process_enemy()
 
-
 waypoint = world.waypoint
 
 # create button
-cancel_button = Button(c.SCREEN_WIDTH + 50, 180, cancel_turret_image, True)
-upgrade_button = Button(c.SCREEN_HEIGHT + 5, 180, upgrade_turret_image, True)
-begin_button = Button(c.SCREEN_HEIGHT + 60, 300, begin_image, True)
+cancel_button = Button(c.SCREEN_WIDTH/2-250, c.SCREEN_HEIGHT-100, cancel_turret_image, True)
+upgrade_button = Button(c.SCREEN_WIDTH - 200, c.SCREEN_HEIGHT-50, upgrade_turret_image, True)
+begin_button = Button(c.SCREEN_WIDTH - 200, 50, begin_image, True)
 restart_button = Button(310, 300, restart_image, True)
-fast_forward_cancel_button = Button(c.SCREEN_HEIGHT + 50, 300, fast_forward_cancel_image, True)
-fast_forward_x3_button = Button(c.SCREEN_HEIGHT + 120, 300, fast_forward_x3_image, True)
-fast_forward_x5_button = Button(c.SCREEN_HEIGHT + 190, 300, fast_forward_x5_image, True)
-witch_selector = Button(0, 0, pygame.transform.scale(witch_spreadsheet[0][0], (99, 99)), True)
-knight_selector = Button(0, 100, pygame.transform.scale(knight_spreadsheet[0][0], (99, 99)), True)
-elf_selector = Button(0, 200, pygame.transform.scale(elf_spreadsheet[0][0], (99, 99)), True)
+fast_forward_cancel_button = Button(c.SCREEN_WIDTH/2+150, 10, fast_forward_cancel_image, True)
+fast_forward_x3_button = Button(c.SCREEN_WIDTH/2+200, 10, fast_forward_x3_image, True)
+fast_forward_x5_button = Button(c.SCREEN_WIDTH/2+250, 10, fast_forward_x5_image, True)
+
+ignore = [upgrade_button, begin_button, fast_forward_cancel_button, fast_forward_x3_button, fast_forward_x5_button]
+
+# Draw Slot for selector
+witch_selector = Button(c.SCREEN_WIDTH/2-150, c.SCREEN_HEIGHT-100, pygame.transform.scale(witch_spreadsheet[0][0], (99, 99)), True)
+knight_selector = Button(c.SCREEN_WIDTH/2-50, c.SCREEN_HEIGHT-100, pygame.transform.scale(knight_spreadsheet[0][0], (99, 99)), True)
+elf_selector = Button(c.SCREEN_WIDTH/2+50, c.SCREEN_HEIGHT-100, pygame.transform.scale(elf_spreadsheet[0][0], (99, 99)), True)
+
 run = True
 
 while run:
@@ -186,7 +200,7 @@ while run:
     for turret in turret_group:
         turret.draw(screen)
 
-    # display_data()
+    display_data()
 
     if not game_over:
         # check if level started
@@ -223,8 +237,9 @@ while run:
 
         # draw button
         # for turret button show cost
-        draw_text(str(c.BUY_COST), text_font, "grey100", (c.SCREEN_WIDTH + 215, 135))
-        screen.blit(coin_gui, (c.SCREEN_WIDTH + 260, 130))
+        draw_slot(witch_selector)
+        draw_slot(knight_selector)
+        draw_slot(elf_selector)
         if witch_selector.draw(screen):
             placing_turret = True
             select = (selector["witch"], "witch")
@@ -285,7 +300,11 @@ while run:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 run = False
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+        if nondeselect(ignore):
+            buttoning = True
+        else:
+            buttoning = False
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and not buttoning:
             mouse_pos = pygame.mouse.get_pos()
             #check if mouse in screen
             if mouse_pos[0] < c.SCREEN_WIDTH and mouse_pos[1] < c.SCREEN_HEIGHT:
