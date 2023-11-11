@@ -1,14 +1,15 @@
 import pygame
 import config as c
-from turret_data import TURRET_DATA
+from turret_data import TURRETS_DATA
 import math
 class Turret(pygame.sprite.Sprite):
-    def __init__(self, sprite_sheets, tile_x, tile_y, shot_fx):
+    def __init__(self, sprite_sheets, tile_x, tile_y, shot_fx, name):
         pygame.sprite.Sprite.__init__(self)
         self.upgrade_level = 1
-        self.range = TURRET_DATA[self.upgrade_level - 1]["range"]
-        self.cooldown = TURRET_DATA[self.upgrade_level - 1]["cooldown"]
-        self.damage = TURRET_DATA[self.upgrade_level - 1]["damage"]
+        self.name = name
+        self.range = TURRETS_DATA[self.name][self.upgrade_level - 1]["range"]
+        self.cooldown = TURRETS_DATA[self.name][self.upgrade_level - 1]["cooldown"]
+        self.damage = TURRETS_DATA[self.name][self.upgrade_level - 1]["damage"]
         self.last_shot = pygame.time.get_ticks()
         self.shot_fx = shot_fx
         self.selected = False
@@ -45,12 +46,8 @@ class Turret(pygame.sprite.Sprite):
 
     def load_image(self, sprite_sheet):
         # to extract image from spritesheet
-        size = sprite_sheet.get_height()
-        animation_list = []
-        for x in range(c.ANIMATION_STEP):
-            temp_img = sprite_sheet.subsurface(x*size, 0, size, size)
-            animation_list.append(temp_img)
-
+        animation_list = [pygame.transform.scale(frame, (99, 99)) for frame in sprite_sheet]
+        
         return animation_list
     
     def update(self, enemy_group, world):
@@ -79,8 +76,8 @@ class Turret(pygame.sprite.Sprite):
                     
                     # Damage enemy
                     self.target.health -= self.damage
-                    break
-
+                    if self.name != "knight": # AOE attack
+                        break
     def play_animation(self):
         # update
         self.original_image = self.animaion_list[self.frame_index]
@@ -95,9 +92,9 @@ class Turret(pygame.sprite.Sprite):
 
     def upgrade(self):
         self.upgrade_level += 1
-        self.range = TURRET_DATA[self.upgrade_level - 1]["range"]
-        self.cooldown = TURRET_DATA[self.upgrade_level - 1]["cooldown"]
-        self.damage = TURRET_DATA[self.upgrade_level - 1]["damage"]
+        self.range = TURRETS_DATA[self.name][self.upgrade_level - 1]["range"]
+        self.cooldown = TURRETS_DATA[self.name][self.upgrade_level - 1]["cooldown"]
+        self.damage = TURRETS_DATA[self.name][self.upgrade_level - 1]["damage"]
 
         # update turret image
         self.animaion_list = self.load_image(self.sprite_sheets[self.upgrade_level - 1])
@@ -119,4 +116,3 @@ class Turret(pygame.sprite.Sprite):
         surface.blit(self.image, self.rect)
         if self.selected:
             surface.blit(self.range_image, self.range_rect)
-        
