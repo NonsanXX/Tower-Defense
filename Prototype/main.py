@@ -78,7 +78,7 @@ with open(os.path.join("Prototype", "levels", "level.tmj")) as file:
 
 # load font for displaing text in screen
 text_font = pygame.font.SysFont("Consolas", 24, bold = True)
-large_font = pygame.font.SysFont("Consolas", 36)
+large_font = pygame.font.SysFont("Consolas", 48)
 
 # function for text on screen
 def draw_text(text, font, color, coor):
@@ -251,10 +251,10 @@ while run:
             select = (selector["elf"], "elf")
         if placing_turret:
             # show cursor
-            cursor_turret = pygame.transform.scale(select[0][0][0], (99, 99))
+            cursor_turret = pygame.transform.scale(select[0][0][0], (200, 200))
             cursor_rect = cursor_turret.get_rect()
             cursor_pos = pygame.mouse.get_pos()
-            cursor_rect.center = cursor_pos
+            cursor_rect.center = (cursor_pos[0], cursor_pos[1] - 60)
             screen.blit(cursor_turret, cursor_rect)
             if cancel_button.draw(screen):
                 placing_turret = False
@@ -270,9 +270,16 @@ while run:
                         selected_turret.upgrade()
                         world.money -= c.UPGRADE_COST
     else:
-        pygame.draw.rect(screen, "dodgerblue", (200, 200, 400, 200), border_radius = 30)
+        rect_width = 800
+        rect_height = 400
+        rect_x = (c.SCREEN_WIDTH - rect_width) // 2
+        rect_y = (c.SCREEN_HEIGHT - rect_height) // 2
+
+        pygame.draw.rect(screen, "dodgerblue", (rect_x, rect_y, rect_width, rect_height), border_radius=30)
         if game_outcome == -1:
-            draw_text("GAME OVER", large_font, "grey0", (310, 230))
+            #draw_text("GAME OVER", large_font, "grey0", (rect_x // 2, rect_y // 2))
+            draw_center_text("GAME OVER", large_font, "grey0", (1, 0), (0, rect_y + 100))
+            #draw_center_text("WAVE %s"%(world.level), large_font, "grey100", (1, 0), (0, 10))
         if game_outcome == 1:
             draw_text("YOU WIN!", large_font, "grey0", (315, 230))
         

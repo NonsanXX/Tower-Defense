@@ -20,7 +20,7 @@ class Turret(pygame.sprite.Sprite):
         self.tile_y = tile_y
         # calc center coor
         self.x = (tile_x+0.5) * c.TILE_SIZE
-        self.y = (tile_y+0.5) * c.TILE_SIZE
+        self.y = (tile_y+0.5) * c.TILE_SIZE-50
 
         # animation var
         self.sprite_sheets = sprite_sheets
