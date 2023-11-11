@@ -12,7 +12,7 @@ pygame.init()
 
 clock = pygame.time.Clock()
 
-screen = pygame.display.set_mode((c.SCREEN_WIDTH + c.SIDE_PANEL, c.SCREEN_HEIGHT), pygame.SCALED | pygame.FULLSCREEN)
+screen = pygame.display.set_mode((c.SCREEN_WIDTH, c.SCREEN_HEIGHT), pygame.SCALED | pygame.FULLSCREEN)
 pygame.display.set_caption("WOTD")
 
 # game variable
@@ -186,7 +186,7 @@ while run:
     for turret in turret_group:
         turret.draw(screen)
 
-    display_data()
+    # display_data()
 
     if not game_over:
         # check if level started
