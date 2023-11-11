@@ -12,7 +12,7 @@ pygame.init()
 
 clock = pygame.time.Clock()
 
-screen = pygame.display.set_mode((c.SCREEN_WIDTH, c.SCREEN_HEIGHT), pygame.SCALED | pygame.FULLSCREEN)
+screen = pygame.display.set_mode((1920,1080), pygame.SCALED | pygame.FULLSCREEN)
 pygame.display.set_caption("WOTD")
 
 # game variable
@@ -27,7 +27,7 @@ selected_turret = False
 buttoning = False
 
 # load image
-map_image = pygame.image.load(os.path.join("Prototype", "levels", "level.png"))
+map_image = pygame.image.load(os.path.join("Prototype", "levels", "Newmap.png"))
 cancel_turret_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "cancel.png")), (99, 99))
 upgrade_turret_image = pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "upgrade_turret.png"))
 begin_image = pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "begin.png"))
