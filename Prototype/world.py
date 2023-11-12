@@ -20,7 +20,7 @@ class World():
     def process_data(self):
         #look though data to extract
         for layer in self.level_data["layers"]:
-            if layer["name"] == "PlacableTile":
+            if layer["name"] == "field":
                 self.tile_map = layer["data"]
             elif layer["name"] == "waypoints":
                 for obj in layer["objects"]:

@@ -27,7 +27,7 @@ selected_turret = False
 buttoning = False
 
 # load image
-map_image = pygame.image.load(os.path.join("Prototype", "levels", "Newmap.png"))
+map_image = pygame.image.load(os.path.join("Prototype", "levels", "map.png"))
 cancel_turret_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "cancel.png")), (99, 99))
 upgrade_turret_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "upgrade_turret.png")), (250, 250))
 begin_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "begin.png")), (250, 250))
@@ -103,7 +103,7 @@ def create_turret(pos, choosing_turret, turret_name):
     mouse_tile_y = pos[1] // c.TILE_SIZE
     # calculate sequence in json tile_map
     mouse_tile_num = (mouse_tile_y * c.COLS) + mouse_tile_x
-    if world.tile_map[mouse_tile_num] == 0:
+    if world.tile_map[mouse_tile_num] == 92:
         # check if already placed
         space_is_free = True
         for turret in turret_group:
