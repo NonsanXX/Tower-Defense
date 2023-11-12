@@ -32,9 +32,9 @@ cancel_turret_image = pygame.transform.scale(pygame.image.load(os.path.join("Pro
 upgrade_turret_image = pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "upgrade_turret.png"))
 begin_image = pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "begin.png"))
 restart_image = pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "restart.png"))
-fast_forward_cancel_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "FFW_cancel.png")), (99, 55))
-fast_forward_x3_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "FFW_X3.png")), (99, 55))
-fast_forward_x5_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "FFW_X5.png")), (99, 55))
+fast_forward_cancel_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "FFW_cancel.png")), (99, 99))
+fast_forward_x3_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "FFW_X3.png")), (99, 99))
+fast_forward_x5_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "FFW_X5.png")), (99, 99))
 
 # load gui
 coin_gui = pygame.image.load(os.path.join("Prototype", "assets", "images", "gui", "coin.png"))
@@ -154,8 +154,8 @@ upgrade_button = Button(c.SCREEN_WIDTH - 200, c.SCREEN_HEIGHT-50, upgrade_turret
 begin_button = Button(c.SCREEN_WIDTH - 200, 50, begin_image, True)
 restart_button = Button(310, 300, restart_image, True)
 fast_forward_cancel_button = Button(c.SCREEN_WIDTH/2+150, 10, fast_forward_cancel_image, True)
-fast_forward_x3_button = Button(c.SCREEN_WIDTH/2+200, 10, fast_forward_x3_image, True)
-fast_forward_x5_button = Button(c.SCREEN_WIDTH/2+250, 10, fast_forward_x5_image, True)
+fast_forward_x3_button = Button(c.SCREEN_WIDTH/2+250, 10, fast_forward_x3_image, True)
+fast_forward_x5_button = Button(c.SCREEN_WIDTH/2+350, 10, fast_forward_x5_image, True)
 
 ignore = [upgrade_button, begin_button, fast_forward_cancel_button, fast_forward_x3_button, fast_forward_x5_button]
 
