@@ -38,6 +38,7 @@ fast_forward_x5_image = pygame.transform.scale(pygame.image.load(os.path.join("P
 
 # load gui
 coin_gui = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "gui", "coin.png")), (120, 120))
+coin_gui_up = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "gui", "coin.png")), (99, 99))
 heart_gui = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "gui", "heart.png")), (120, 120))
 logo_gui = pygame.image.load(os.path.join("Prototype", "assets", "images", "gui", "logo.png"))
 
@@ -255,7 +256,7 @@ while run:
             cursor_turret = pygame.transform.scale(select[0][0][0], (99, 99))
             cursor_rect = cursor_turret.get_rect()
             cursor_pos = pygame.mouse.get_pos()
-            cursor_rect.center = (cursor_pos[0], cursor_pos[1] - 30)
+            cursor_rect.center = (cursor_pos[0], cursor_pos[1]-30)
             screen.blit(cursor_turret, cursor_rect)
             if cancel_button.draw(screen):
                 placing_turret = False
@@ -264,8 +265,8 @@ while run:
             # check if turret can be upgraded
             if selected_turret.upgrade_level < c.TURRET_LEVEL:
                 # show cost of an upgrade button
-                draw_text(str(c.UPGRADE_COST), text_font, "grey100", (c.SCREEN_WIDTH + 215, 195))
-                screen.blit(coin_gui, (c.SCREEN_WIDTH + 260, 190))
+                draw_text(str(c.UPGRADE_COST), large_font, "grey100", (c.SCREEN_WIDTH - 200, c.SCREEN_HEIGHT - 200))
+                screen.blit(coin_gui_up, (c.SCREEN_WIDTH - 300, c.SCREEN_HEIGHT - 220))
                 if upgrade_button.draw(screen):
                     if world.money >= c.UPGRADE_COST:
                         selected_turret.upgrade()
