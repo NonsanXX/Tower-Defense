@@ -31,7 +31,7 @@ class Enemy(pygame.sprite.Sprite):
             self.kill()
             world.health -= self.health
             world.money += self.reward
-            world.missed_enemy += 1
+            world.missed_enemy += 1            
             return
         self.target = Vector2(self.waypoint[self.target_waypoint])
         self.movement = self.target - self.pos

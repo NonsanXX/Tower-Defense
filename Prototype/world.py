@@ -50,9 +50,7 @@ class World():
         enemies = ENEMY_SPAWN_DATA[self.level - 1]
         for enemy_type in enemies:
             enemies_to_spawn = enemies[enemy_type]
-            self.enemy_list.extend([enemy_type]*enemies_to_spawn)
-
+            self.enemy_list.extend([enemy_type]*enemies_to_spawn)            
+        
         # shuffle list
         shuffle(self.enemy_list)
-
-        

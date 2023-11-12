@@ -92,14 +92,14 @@ def draw_center_text(text, font, color, eneble, coor):
     img_rect = img.get_rect(center=(c.SCREEN_WIDTH/2, c.SCREEN_HEIGHT/2))
     screen.blit(img, (img_rect.x*eneble[0]+coor[0], img_rect.y*eneble[1]+coor[1]))
 
-def display_data():
+def display_data(enemy_group):
     #display data
     screen.blit(heart_gui, (10, c.SCREEN_HEIGHT-115))
     draw_text(str(world.health), text_font, "grey100", (125, c.SCREEN_HEIGHT-80))
     screen.blit(coin_gui, (10, 10))
     draw_text(str(world.money), text_font, "grey100", (125, 40))
-
     draw_center_text("WAVE %s"%(world.level), text_wave, "grey100", (1, 0), (0, 30))
+    draw_text("AMOUNT : %s"%(len(enemy_group)), text_font, "grey100", (60, 60))
 
 def create_turret(pos, choosing_turret, turret_name):
     mouse_tile_x = pos[0] // c.TILE_SIZE
@@ -221,7 +221,7 @@ while run:
     for turret in turret_group:
         turret.draw(screen)
 
-    display_data()
+    display_data(enemy_group)
 
     if out_of_menu:
         if not game_over:
