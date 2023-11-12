@@ -5,7 +5,10 @@ from enemy import Enemy
 from world import World
 from turret import Turret
 from button import Button
+from tracking import TrackingEnemy
+from enemy_data import ENEMY_SPAWN_DATA
 import os
+from random import shuffle
 
 # Initialize pygame game
 pygame.init()
@@ -19,15 +22,19 @@ pygame.display.set_caption("WOTD")
 is_fast_forward = False
 current_fast_forward_type = 1
 game_over = False
-game_outcome = 0 # -1 lost and 1 is win
+game_outcome = 0 # -1 lost and 1 is pause
 level_started = False
 last_enemy_spawn = pygame.time.get_ticks()
 placing_turret = False
 selected_turret = False
 buttoning = False
+out_of_menu = False
+shuffle(c.CHEERUP_TEXT)
+game_paused = False
+game_paused_tmp = 1
 
 # load image
-map_image = pygame.image.load(os.path.join("Prototype", "levels", "Newmap.png"))
+map_image = pygame.image.load(os.path.join("Prototype", "levels", "map.png"))
 cancel_turret_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "cancel.png")), (99, 99))
 upgrade_turret_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "upgrade_turret.png")), (250, 250))
 begin_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "begin.png")), (250, 250))
@@ -38,6 +45,7 @@ fast_forward_x5_image = pygame.transform.scale(pygame.image.load(os.path.join("P
 
 # load gui
 coin_gui = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "gui", "coin.png")), (120, 120))
+coin_gui_up = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "gui", "coin.png")), (99, 99))
 heart_gui = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "gui", "heart.png")), (120, 120))
 logo_gui = pygame.image.load(os.path.join("Prototype", "assets", "images", "gui", "logo.png"))
 
@@ -77,8 +85,30 @@ with open(os.path.join("Prototype", "levels", "level.tmj")) as file:
     world_data = json.load(file)
 
 # load font for displaing text in screen
-text_font = pygame.font.SysFont("Consolas", 58, bold = True)
-large_font = pygame.font.SysFont("Consolas", 48)
+text_font = pygame.font.Font("Prototype/assets/fonts/PixelAzureBonds-327Z.ttf", 50)
+text_enemy = pygame.font.Font("Prototype/assets/fonts/PixelAzureBonds-327Z.ttf", 30)
+text_wave = pygame.font.Font("Prototype/assets/fonts/AncientModernTales-a7Po.ttf", 60)
+text_high_wave = pygame.font.Font("Prototype/assets/fonts/AncientModernTales-a7Po.ttf", 30)
+text_win_or_lose = pygame.font.Font("Prototype/assets/fonts/AncientModernTales-a7Po.ttf", 80)
+text_cheer = pygame.font.Font("Prototype/assets/fonts/ZF2ndPixelus.ttf", 50)
+
+# Load the high score
+def load_high_wave():
+    if os.path.exists(c.SCORE_FILE):
+        with open(c.SCORE_FILE, 'r') as file:
+            try:
+                high_score = int(file.read())
+            except ValueError:
+                high_score = 0
+    else:
+        high_score = 0
+    return high_score
+
+# Save the high score
+def save_high_wave(score):
+    with open(c.SCORE_FILE, 'w') as file:
+        file.write(str(score))
+
 
 # function for text on screen
 def draw_text(text, font, color, coor):
@@ -89,21 +119,23 @@ def draw_center_text(text, font, color, eneble, coor):
     img_rect = img.get_rect(center=(c.SCREEN_WIDTH/2, c.SCREEN_HEIGHT/2))
     screen.blit(img, (img_rect.x*eneble[0]+coor[0], img_rect.y*eneble[1]+coor[1]))
 
-def display_data():
+def display_data(tracker, level, difficulty):
     #display data
     screen.blit(heart_gui, (10, c.SCREEN_HEIGHT-115))
     draw_text(str(world.health), text_font, "grey100", (125, c.SCREEN_HEIGHT-80))
     screen.blit(coin_gui, (10, 10))
-    draw_text(str(world.money), text_font, "grey100", (125, 40))
-
-    draw_center_text("WAVE %s"%(world.level), large_font, "grey100", (1, 0), (0, 10))
+    draw_text(str(int(world.money)), text_font, "grey100", (125, 40))
+    draw_center_text("WAVE %s"%(level), text_wave, "grey100", (1, 0), (0, 30))
+    draw_center_text("Highest Wave : %s"%(high_wave), text_high_wave, "grey100", (1, 0), (0, 90))
+    draw_center_text("Difficulty : %.1f"%(difficulty), text_high_wave, "grey100", (1, 0), (0, 125))
+    draw_text("ENEMY : %s"%(sum(ENEMY_SPAWN_DATA[(level-1)%c.TOTAL_LEVEL].values())-tracker.killed), text_enemy, "grey100", (60, 120))
 
 def create_turret(pos, choosing_turret, turret_name):
     mouse_tile_x = pos[0] // c.TILE_SIZE
     mouse_tile_y = pos[1] // c.TILE_SIZE
     # calculate sequence in json tile_map
     mouse_tile_num = (mouse_tile_y * c.COLS) + mouse_tile_x
-    if world.tile_map[mouse_tile_num] == 0:
+    if world.tile_map[mouse_tile_num] == 92:
         # check if already placed
         space_is_free = True
         for turret in turret_group:
@@ -137,6 +169,21 @@ def nondeselect(ignore):
         if button.rect.collidepoint(mouse_pos):
             return True
 
+#create menu
+white = (255, 255, 255)
+black = (0, 0, 0)
+
+menu_options = ["Start Game", "Quit"]
+selected_option = 0
+
+def draw_menu():
+    screen.fill(black)
+    for i, option in enumerate(menu_options):
+        text = text_font.render(option, True, white if i == selected_option else (150, 150, 150))
+        text_rect = text.get_rect(center=(c.SCREEN_WIDTH // 2, c.SCREEN_HEIGHT // 2 + i * 50))
+        screen.blit(text, text_rect)
+
+
 #create group
 enemy_group = pygame.sprite.Group()
 turret_group = pygame.sprite.Group()
@@ -157,42 +204,44 @@ fast_forward_cancel_button = Button(c.SCREEN_WIDTH/2+150, 10, fast_forward_cance
 fast_forward_x3_button = Button(c.SCREEN_WIDTH/2+250, 10, fast_forward_x3_image, True)
 fast_forward_x5_button = Button(c.SCREEN_WIDTH/2+350, 10, fast_forward_x5_image, True)
 
-ignore = [upgrade_button, begin_button, fast_forward_cancel_button, fast_forward_x3_button, fast_forward_x5_button]
-
 # Draw Slot for selector
 witch_selector = Button(c.SCREEN_WIDTH/2-150, c.SCREEN_HEIGHT-100, pygame.transform.scale(witch_spreadsheet[0][0], (99, 99)), True)
 knight_selector = Button(c.SCREEN_WIDTH/2-50, c.SCREEN_HEIGHT-100, pygame.transform.scale(knight_spreadsheet[0][0], (99, 99)), True)
 elf_selector = Button(c.SCREEN_WIDTH/2+50, c.SCREEN_HEIGHT-100, pygame.transform.scale(elf_spreadsheet[0][0], (99, 99)), True)
 
+# No other action done when mouse is hover over button
+ignore = [cancel_button, upgrade_button, begin_button, fast_forward_cancel_button, fast_forward_x3_button, fast_forward_x5_button, witch_selector, knight_selector, elf_selector]
+
+tracker = TrackingEnemy()
+
 run = True
+high_wave = load_high_wave()
 
 while run:
     clock.tick(c.FPS)
-
     #####################
     # UPDATING SECTION
     #####################
     world.game_speed = current_fast_forward_type
-    if not game_over:
-        # check if player is lost
-        if world.health <= 0:
-            game_over = True
-            game_outcome = -1 # lost
-        # check if player is win
-        if world.level > c.TOTAL_LEVEL:
-            game_over = True
-            game_outcome = 1 # win
+    if out_of_menu:
+        if not game_over:
+            # check if player is lost
+            if world.health <= 0:
+                game_over = True
+                game_outcome = -1 # lost
+                tracker.reset()
 
-        enemy_group.update(world)
-        turret_group.update(enemy_group, world)
+            enemy_group.update(world)
+            turret_group.update(enemy_group, world)
 
-        # Highlight selected turret
-        if selected_turret:
-            selected_turret.selected = True
+            # Highlight selected turret
+            if selected_turret:
+                selected_turret.selected = True
 
     #####################
     # DRAW SECTION
     #####################
+    pygame.Surface.fill(screen, "Black")
     world.draw(screen)
 
     # draw group of enemies
@@ -200,105 +249,112 @@ while run:
     for turret in turret_group:
         turret.draw(screen)
 
-    display_data()
+    display_data(tracker, world.level, world.difficulty)
 
-    if not game_over:
-        # check if level started
-        if not level_started:
-            time_begin = pygame.time.get_ticks()
-            if begin_button.draw(screen):
-                level_started = True
+    if out_of_menu:
+        if not game_over and not game_paused:
+            # check if level started
+            if not level_started:
+                time_begin = pygame.time.get_ticks()
+                if begin_button.draw(screen):
+                    level_started = True
+            else:
+                # Fast forward option
+                if pygame.time.get_ticks() - time_begin > 100: # Check if delta time is greater than 100ms
+                    if fast_forward_cancel_button.draw(screen):
+                        current_fast_forward_type = 1
+                    if fast_forward_x3_button.draw(screen):
+                        current_fast_forward_type = 3
+                    if fast_forward_x5_button.draw(screen):
+                        current_fast_forward_type = 5
+                # Spawn enemies
+                if pygame.time.get_ticks() - last_enemy_spawn > c.SPAWN_COOLDOWN / world.game_speed:
+                    if world.spawned_enemy < len(world.enemy_list):
+                        enemy_type = world.enemy_list[world.spawned_enemy]
+                        enemy = Enemy(enemy_type, waypoint, enemy_images, tracker, world)
+                        enemy_group.add(enemy)
+                        world.spawned_enemy += 1
+                        last_enemy_spawn = pygame.time.get_ticks()
+
+            # check if complete wave
+            if world.check_level_complete():
+                world.money += c.LEVEL_COMPLETE_REWARD
+                world.level += 1
+                tracker.reset()
+                level_started = False
+                last_enemy_spawn = pygame.time.get_ticks()
+                world.reset_level()
+                world.process_enemy()
+
+            # draw button
+            # for turret button show cost
+            draw_slot(witch_selector)
+            draw_slot(knight_selector)
+            draw_slot(elf_selector)
+            if witch_selector.draw(screen):
+                placing_turret = True
+                select = (selector["witch"], "witch")
+            if knight_selector.draw(screen):
+                placing_turret = True
+                select = (selector["knight"], "knight")
+            if elf_selector.draw(screen):
+                placing_turret = True
+                select = (selector["elf"], "elf")
+            if placing_turret:
+                # show cursor
+                cursor_turret = pygame.transform.scale(select[0][0][0], (99, 99))
+                cursor_rect = cursor_turret.get_rect()
+                cursor_pos = pygame.mouse.get_pos()
+                cursor_rect.center = (cursor_pos[0], cursor_pos[1]-30)
+                screen.blit(cursor_turret, cursor_rect)
+                if cancel_button.draw(screen):
+                    placing_turret = False
+            # show upgrade if turret is selected
+            if selected_turret:
+                # check if turret can be upgraded
+                if selected_turret.upgrade_level < c.TURRET_LEVEL:
+                    # show cost of an upgrade button
+                    draw_text(str(c.UPGRADE_COST), text_font, "grey100", (c.SCREEN_WIDTH - 200, c.SCREEN_HEIGHT - 200))
+                    screen.blit(coin_gui_up, (c.SCREEN_WIDTH - 300, c.SCREEN_HEIGHT - 220))
+                    if upgrade_button.draw(screen):
+                        if world.money >= c.UPGRADE_COST:
+                            selected_turret.upgrade()
+                            world.money -= c.UPGRADE_COST
         else:
-            # Fast forward option
-            if pygame.time.get_ticks() - time_begin > 100: # Check if delta time is greater than 100ms
-                if fast_forward_cancel_button.draw(screen):
-                    current_fast_forward_type = 1
-                if fast_forward_x3_button.draw(screen):
-                    current_fast_forward_type = 3
-                if fast_forward_x5_button.draw(screen):
-                    current_fast_forward_type = 5
-            # Spawn enemies
-            if pygame.time.get_ticks() - last_enemy_spawn > c.SPAWN_COOLDOWN / world.game_speed:
-                if world.spawned_enemy < len(world.enemy_list):
-                    enemy_type = world.enemy_list[world.spawned_enemy]
-                    enemy = Enemy(enemy_type, waypoint, enemy_images)
-                    enemy_group.add(enemy)
-                    world.spawned_enemy += 1
-                    last_enemy_spawn = pygame.time.get_ticks()
+            rect_width = 800
+            rect_height = 400
+            rect_x = (c.SCREEN_WIDTH - rect_width) // 2
+            rect_y = (c.SCREEN_HEIGHT - rect_height) // 2
 
-        # check if complete wave
-        if world.check_level_complete():
-            world.money += c.LEVEL_COMPLETE_REWARD
-            world.level += 1
-            level_started = False
-            last_enemy_spawn = pygame.time.get_ticks()
-            world.reset_level()
-            world.process_enemy()
-
-        # draw button
-        # for turret button show cost
-        draw_slot(witch_selector)
-        draw_slot(knight_selector)
-        draw_slot(elf_selector)
-        if witch_selector.draw(screen):
-            placing_turret = True
-            select = (selector["witch"], "witch")
-        if knight_selector.draw(screen):
-            placing_turret = True
-            select = (selector["knight"], "knight")
-        if elf_selector.draw(screen):
-            placing_turret = True
-            select = (selector["elf"], "elf")
-        if placing_turret:
-            # show cursor
-            cursor_turret = pygame.transform.scale(select[0][0][0], (200, 200))
-            cursor_rect = cursor_turret.get_rect()
-            cursor_pos = pygame.mouse.get_pos()
-            cursor_rect.center = (cursor_pos[0], cursor_pos[1] - 60)
-            screen.blit(cursor_turret, cursor_rect)
-            if cancel_button.draw(screen):
+            pygame.draw.rect(screen, "black", (rect_x, rect_y, rect_width, rect_height), border_radius=30)
+            if game_outcome == -1:
+                #draw_text("GAME OVER", large_font, "grey0", (rect_x // 2, rect_y // 2))
+                draw_center_text("GAME OVER", text_win_or_lose, "white", (1, 0), (0, rect_y + 100))
+                draw_center_text("%s" %(c.CHEERUP_TEXT[0]), text_cheer, "white", (1, 0), (0, rect_y + 200))
+                if world.level > high_wave:
+                    high_wave = world.level
+                    save_high_wave(high_wave)
+            elif game_outcome == 1:
+                draw_center_text("PAUSED", text_win_or_lose, "white", (1, 0), (0, rect_y + 100))
+                current_fast_forward_type = 0
+            # restart level
+            if restart_button.draw(screen):
+                game_over = False
+                level_started = False
                 placing_turret = False
-        # show upgrade if turret is selected
-        if selected_turret:
-            # check if turret can be upgraded
-            if selected_turret.upgrade_level < c.TURRET_LEVEL:
-                # show cost of an upgrade button
-                draw_text(str(c.UPGRADE_COST), text_font, "grey100", (c.SCREEN_WIDTH + 215, 195))
-                screen.blit(coin_gui, (c.SCREEN_WIDTH + 260, 190))
-                if upgrade_button.draw(screen):
-                    if world.money >= c.UPGRADE_COST:
-                        selected_turret.upgrade()
-                        world.money -= c.UPGRADE_COST
-    else:
-        rect_width = 800
-        rect_height = 400
-        rect_x = (c.SCREEN_WIDTH - rect_width) // 2
-        rect_y = (c.SCREEN_HEIGHT - rect_height) // 2
+                selected_turret = None
+                game_paused = False
+                current_fast_forward_type = 1
+                last_enemy_spawn = pygame.time.get_ticks()
+                
+                #reset world
+                world = World(world_data, map_image)
+                world.process_data()
+                world.process_enemy()
 
-        pygame.draw.rect(screen, "dodgerblue", (rect_x, rect_y, rect_width, rect_height), border_radius=30)
-        if game_outcome == -1:
-            #draw_text("GAME OVER", large_font, "grey0", (rect_x // 2, rect_y // 2))
-            draw_center_text("GAME OVER", large_font, "grey0", (1, 0), (0, rect_y + 100))
-            #draw_center_text("WAVE %s"%(world.level), large_font, "grey100", (1, 0), (0, 10))
-        if game_outcome == 1:
-            draw_text("YOU WIN!", large_font, "grey0", (315, 230))
-        
-        # restart level
-        if restart_button.draw(screen):
-            game_over = False
-            level_started = False
-            placing_turret = False
-            selected_turret = None
-            last_enemy_spawn = pygame.time.get_ticks()
-            
-            #reset world
-            world = World(world_data, map_image)
-            world.process_data()
-            world.process_enemy()
-
-            #empty group
-            enemy_group.empty()
-            turret_group.empty()
+                #empty group
+                enemy_group.empty()
+                turret_group.empty()
 
     #event handler
     for event in pygame.event.get():
@@ -306,7 +362,14 @@ while run:
             run = False
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
-                run = False
+                if game_paused_tmp % 2 == 0:
+                    game_outcome = 0
+                    game_paused = False
+                    current_fast_forward_type = 1
+                else:
+                    game_outcome = 1
+                    game_paused = True
+                game_paused_tmp += 1
         if nondeselect(ignore):
             buttoning = True
         else:
@@ -319,9 +382,24 @@ while run:
                 deselect_turret()
                 if placing_turret:
                     # if have enough money
-                    if world.money >= c.BUY_COST:
+                    if world.money >= c.BUY_COST and not buttoning:
                         create_turret(mouse_pos, select[0], select[1])
                 else:
                     selected_turret = select_turret(mouse_pos)
+        if not out_of_menu:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    selected_option = (selected_option - 1) % len(menu_options)
+                elif event.key == pygame.K_DOWN:
+                    selected_option = (selected_option + 1) % len(menu_options)
+                elif event.key == pygame.K_RETURN:
+                    # Perform action based on the selected option
+                    if selected_option == 0:
+                        out_of_menu = True
+                        # Add code to start the game here
+                    elif selected_option == 1:
+                        run = False
+    if not out_of_menu:
+        draw_menu()
     pygame.display.update()
 pygame.quit()
