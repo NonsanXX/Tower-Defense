@@ -252,7 +252,7 @@ while run:
             select = (selector["elf"], "elf")
         if placing_turret:
             # show cursor
-            cursor_turret = pygame.transform.scale(select[0][0][0], (200, 200))
+            cursor_turret = pygame.transform.scale(select[0][0][0], (99, 99))
             cursor_rect = cursor_turret.get_rect()
             cursor_pos = pygame.mouse.get_pos()
             cursor_rect.center = (cursor_pos[0], cursor_pos[1] - 30)
