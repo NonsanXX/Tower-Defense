@@ -222,7 +222,7 @@ while run:
     #####################
     # UPDATING SECTION
     #####################
-    world.game_speed = current_fast_forward_type
+    world.game_speed = 0 if game_paused else current_fast_forward_type
     if out_of_menu:
         if not game_over:
             # check if player is lost
@@ -336,7 +336,7 @@ while run:
                     save_high_wave(high_wave)
             elif game_outcome == 1:
                 draw_center_text("PAUSED", text_win_or_lose, "white", (1, 0), (0, rect_y + 100))
-                current_fast_forward_type = 0
+                #current_fast_forward_type = 0
             # restart level
             if restart_button.draw(screen):
                 game_over = False
@@ -365,7 +365,6 @@ while run:
                 if game_paused_tmp % 2 == 0:
                     game_outcome = 0
                     game_paused = False
-                    current_fast_forward_type = 1
                 else:
                     game_outcome = 1
                     game_paused = True
