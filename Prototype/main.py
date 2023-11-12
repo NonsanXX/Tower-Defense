@@ -29,7 +29,7 @@ buttoning = False
 # load image
 map_image = pygame.image.load(os.path.join("Prototype", "levels", "Newmap.png"))
 cancel_turret_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "cancel.png")), (99, 99))
-upgrade_turret_image = pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "upgrade_turret.png"))
+upgrade_turret_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "upgrade_turret.png")), (250, 250))
 begin_image = pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "begin.png"))
 restart_image = pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "restart.png"))
 fast_forward_cancel_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "FFW_cancel.png")), (99, 99))
@@ -150,7 +150,7 @@ waypoint = world.waypoint
 
 # create button
 cancel_button = Button(c.SCREEN_WIDTH/2-250, c.SCREEN_HEIGHT-100, cancel_turret_image, True)
-upgrade_button = Button(c.SCREEN_WIDTH - 200, c.SCREEN_HEIGHT-50, upgrade_turret_image, True)
+upgrade_button = Button(c.SCREEN_WIDTH - 300, c.SCREEN_HEIGHT-200, upgrade_turret_image, True)
 begin_button = Button(c.SCREEN_WIDTH - 200, 50, begin_image, True)
 restart_button = Button(310, 300, restart_image, True)
 fast_forward_cancel_button = Button(c.SCREEN_WIDTH/2+150, 10, fast_forward_cancel_image, True)
