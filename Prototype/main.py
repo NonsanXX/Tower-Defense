@@ -224,7 +224,7 @@ while run:
     #####################
     world.game_speed = 0 if game_paused else current_fast_forward_type
     if out_of_menu:
-        if not game_over:
+        if not game_over and not game_paused:
             # check if player is lost
             if world.health <= 0:
                 game_over = True
@@ -345,6 +345,7 @@ while run:
                 selected_turret = None
                 game_paused = False
                 current_fast_forward_type = 1
+                game_outcome = 0
                 last_enemy_spawn = pygame.time.get_ticks()
                 
                 #reset world
@@ -361,7 +362,7 @@ while run:
         if event.type == pygame.QUIT:
             run = False
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE:
+            if event.key == pygame.K_ESCAPE and game_outcome != -1:
                 if game_paused_tmp % 2 == 0:
                     game_outcome = 0
                     game_paused = False
