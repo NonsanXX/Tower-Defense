@@ -86,12 +86,13 @@ with open(os.path.join("Prototype", "levels", "level.tmj")) as file:
     world_data = json.load(file)
 
 # load font for displaing text in screen
-text_font = pygame.font.Font("Prototype/assets/fonts/PixelAzureBonds-327Z.ttf", 50)
-text_enemy = pygame.font.Font("Prototype/assets/fonts/PixelAzureBonds-327Z.ttf", 30)
-text_wave = pygame.font.Font("Prototype/assets/fonts/AncientModernTales-a7Po.ttf", 60)
-text_high_wave = pygame.font.Font("Prototype/assets/fonts/AncientModernTales-a7Po.ttf", 30)
-text_win_or_lose = pygame.font.Font("Prototype/assets/fonts/AncientModernTales-a7Po.ttf", 80)
-text_cheer = pygame.font.Font("Prototype/assets/fonts/ZF2ndPixelus.ttf", 50)
+def load_font(font, size):
+    if font == 'pixel':
+        return pygame.font.Font("Prototype/assets/fonts/PixelAzureBonds-327Z.ttf", size)
+    elif font == 'ancient':
+        return pygame.font.Font("Prototype/assets/fonts/AncientModernTales-a7Po.ttf", size)
+    elif font == 'thai':
+        return pygame.font.Font("Prototype/assets/fonts/ZF2ndPixelus.ttf", 50)
 
 # Load the high score
 def load_high_wave():
@@ -123,13 +124,13 @@ def draw_center_text(text, font, color, eneble, coor):
 def display_data(tracker, level, difficulty):
     #display data
     screen.blit(heart_gui, (10, c.SCREEN_HEIGHT-115))
-    draw_text(str(world.health), text_font, "grey100", (125, c.SCREEN_HEIGHT-80))
+    draw_text(str(world.health), load_font('pixel', 50), "grey100", (125, c.SCREEN_HEIGHT-80))
     screen.blit(coin_gui, (10, 10))
-    draw_text(str(int(world.money)), text_font, "grey100", (125, 40))
-    draw_center_text("WAVE %s"%(level), text_wave, "grey100", (1, 0), (0, 30))
-    draw_center_text("Highest Wave : %s"%(high_wave), text_high_wave, "grey100", (1, 0), (0, 90))
-    draw_center_text("Difficulty : %.1f"%(difficulty), text_high_wave, "grey100", (1, 0), (0, 125))
-    draw_text("ENEMY : %s"%(sum(ENEMY_SPAWN_DATA[(level-1)%c.TOTAL_LEVEL].values())-tracker.killed), text_enemy, "grey100", (60, 120))
+    draw_text(str(int(world.money)), load_font('pixel', 50), "grey100", (125, 40))
+    draw_center_text("WAVE %s"%(level), load_font('ancient', 60), "grey100", (1, 0), (0, 30))
+    draw_center_text("Highest Wave : %s"%(high_wave), load_font('pixel', 30), "grey100", (1, 0), (0, 90))
+    draw_center_text("Difficulty : %.1f"%(difficulty), load_font('pixel', 30), "grey100", (1, 0), (0, 125))
+    draw_text("ENEMY : %s"%(sum(ENEMY_SPAWN_DATA[(level-1)%c.TOTAL_LEVEL].values())-tracker.killed), load_font("pixel", 30), "grey100", (60, 120))
 
 def create_turret(pos, choosing_turret, turret_name):
     mouse_tile_x = pos[0] // c.TILE_SIZE
@@ -179,9 +180,10 @@ def draw_menu():
     screen.fill("black")
     screen.blit(wallpaper, wallpaper.get_rect())
     for i, option in enumerate(menu_options):
-        text = text_font.render(option, True, "white" if i == selected_option else (150, 150, 150))
+        text = load_font("pixel", 50).render(option, True, "white" if i == selected_option else (150, 150, 150))
         text_rect = text.get_rect(center=(c.SCREEN_WIDTH // 2, c.SCREEN_HEIGHT // 2 + (i+1) * 100))
         screen.blit(text, text_rect)
+    draw_center_text("Highest Wave : %s"%(high_wave), load_font("ancient", 80), "grey100", (1, 0), (0, c.SCREEN_WIDTH // 2 - 100))
 
 
 #create group
@@ -314,7 +316,7 @@ while run:
                 # check if turret can be upgraded
                 if selected_turret.upgrade_level < c.TURRET_LEVEL:
                     # show cost of an upgrade button
-                    draw_text(str(c.UPGRADE_COST), text_font, "grey100", (c.SCREEN_WIDTH - 200, c.SCREEN_HEIGHT - 200))
+                    draw_text(str(c.UPGRADE_COST), load_font("pixel", 50), "grey100", (c.SCREEN_WIDTH - 200, c.SCREEN_HEIGHT - 200))
                     screen.blit(coin_gui_up, (c.SCREEN_WIDTH - 300, c.SCREEN_HEIGHT - 220))
                     if upgrade_button.draw(screen):
                         if world.money >= c.UPGRADE_COST:
@@ -329,13 +331,13 @@ while run:
             pygame.draw.rect(screen, "black", (rect_x, rect_y, rect_width, rect_height), border_radius=30)
             if game_outcome == -1:
                 #draw_text("GAME OVER", large_font, "grey0", (rect_x // 2, rect_y // 2))
-                draw_center_text("GAME OVER", text_win_or_lose, "white", (1, 0), (0, rect_y + 100))
-                draw_center_text("%s" %(c.CHEERUP_TEXT[0]), text_cheer, "white", (1, 0), (0, rect_y + 200))
+                draw_center_text("GAME OVER", load_font("ancient", 80), "white", (1, 0), (0, rect_y + 100))
+                draw_center_text("%s" %(c.CHEERUP_TEXT[0]), load_font("thai", 50), "white", (1, 0), (0, rect_y + 200))
                 if world.level > high_wave:
                     high_wave = world.level
                     save_high_wave(high_wave)
             elif game_outcome == 1:
-                draw_center_text("PAUSED", text_win_or_lose, "white", (1, 0), (0, rect_y + 100))
+                draw_center_text("PAUSED", load_font("ancient", 80), "white", (1, 0), (0, rect_y + 100))
                 #current_fast_forward_type = 0
             # restart level
             if restart_button.draw(screen):
