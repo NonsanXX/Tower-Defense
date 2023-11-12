@@ -5,6 +5,8 @@ from enemy import Enemy
 from world import World
 from turret import Turret
 from button import Button
+from tracking import TrackingEnemy
+from enemy_data import ENEMY_SPAWN_DATA
 import os
 
 # Initialize pygame game
@@ -94,14 +96,14 @@ def draw_center_text(text, font, color, eneble, coor):
     img_rect = img.get_rect(center=(c.SCREEN_WIDTH/2, c.SCREEN_HEIGHT/2))
     screen.blit(img, (img_rect.x*eneble[0]+coor[0], img_rect.y*eneble[1]+coor[1]))
 
-def display_data(enemy_group):
+def display_data(tracker, level):
     #display data
     screen.blit(heart_gui, (10, c.SCREEN_HEIGHT-115))
     draw_text(str(world.health), text_font, "grey100", (125, c.SCREEN_HEIGHT-80))
     screen.blit(coin_gui, (10, 10))
     draw_text(str(world.money), text_font, "grey100", (125, 40))
     draw_center_text("WAVE %s"%(world.level), text_wave, "grey100", (1, 0), (0, 30))
-    draw_text("ENEMY : %s"%(len(enemy_group)), text_enemy, "grey100", (60, 120))
+    draw_text("ENEMY : %s"%(sum(ENEMY_SPAWN_DATA[level-1].values())-tracker.killed), text_enemy, "grey100", (60, 120))
 
 def create_turret(pos, choosing_turret, turret_name):
     mouse_tile_x = pos[0] // c.TILE_SIZE
@@ -185,11 +187,12 @@ elf_selector = Button(c.SCREEN_WIDTH/2+50, c.SCREEN_HEIGHT-100, pygame.transform
 # No other action done when mouse is hover over button
 ignore = [cancel_button, upgrade_button, begin_button, fast_forward_cancel_button, fast_forward_x3_button, fast_forward_x5_button, witch_selector, knight_selector, elf_selector]
 
+tracker = TrackingEnemy()
+
 run = True
 
 while run:
     clock.tick(c.FPS)
-
     #####################
     # UPDATING SECTION
     #####################
@@ -223,7 +226,7 @@ while run:
     for turret in turret_group:
         turret.draw(screen)
 
-    display_data(enemy_group)
+    display_data(tracker, world.level)
 
     if out_of_menu:
         if not game_over:
@@ -245,7 +248,7 @@ while run:
                 if pygame.time.get_ticks() - last_enemy_spawn > c.SPAWN_COOLDOWN / world.game_speed:
                     if world.spawned_enemy < len(world.enemy_list):
                         enemy_type = world.enemy_list[world.spawned_enemy]
-                        enemy = Enemy(enemy_type, waypoint, enemy_images)
+                        enemy = Enemy(enemy_type, waypoint, enemy_images, tracker)
                         enemy_group.add(enemy)
                         world.spawned_enemy += 1
                         last_enemy_spawn = pygame.time.get_ticks()
@@ -254,6 +257,7 @@ while run:
             if world.check_level_complete():
                 world.money += c.LEVEL_COMPLETE_REWARD
                 world.level += 1
+                tracker.reset()
                 level_started = False
                 last_enemy_spawn = pygame.time.get_ticks()
                 world.reset_level()
