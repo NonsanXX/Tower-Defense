@@ -113,7 +113,6 @@ ENEMY_SPAWN_DATA = [
         "elite": 0,
     }
 ]
-
 ENEMY_DATA = {
     "weak": {"health": 60, "speed": 2, "reward": 10},
     "medium": {"health": 80, "speed": 4, "reward": 15},

@@ -3,15 +3,15 @@ from pygame.math import Vector2
 from enemy_data import ENEMY_DATA
 import math
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self, enemy_type, waypoint, images, tracker):
+    def __init__(self, enemy_type, waypoint, images, tracker, world):
         pygame.sprite.Sprite.__init__(self)
         self.waypoint = waypoint
         self.pos = Vector2(self.waypoint[0])
         self.target_waypoint = 1
 
-        self.health = ENEMY_DATA[enemy_type]["health"]
-        self.speed = ENEMY_DATA[enemy_type]["speed"]
-        self.reward = ENEMY_DATA[enemy_type]["reward"]
+        self.health = ENEMY_DATA[enemy_type]["health"]*world.difficulty
+        self.speed = ENEMY_DATA[enemy_type]["speed"]*world.difficulty
+        self.reward = ENEMY_DATA[enemy_type]["reward"]*(1+world.difficulty**0.25)
 
         self.angle = 0
         self.original_image = pygame.transform.scale(images[enemy_type], (180, 180))

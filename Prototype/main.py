@@ -115,15 +115,16 @@ def draw_center_text(text, font, color, eneble, coor):
     img_rect = img.get_rect(center=(c.SCREEN_WIDTH/2, c.SCREEN_HEIGHT/2))
     screen.blit(img, (img_rect.x*eneble[0]+coor[0], img_rect.y*eneble[1]+coor[1]))
 
-def display_data(tracker, level):
+def display_data(tracker, level, difficulty):
     #display data
     screen.blit(heart_gui, (10, c.SCREEN_HEIGHT-115))
     draw_text(str(world.health), text_font, "grey100", (125, c.SCREEN_HEIGHT-80))
     screen.blit(coin_gui, (10, 10))
-    draw_text(str(world.money), text_font, "grey100", (125, 40))
-    draw_center_text("WAVE %s"%(world.level), text_wave, "grey100", (1, 0), (0, 30))
+    draw_text(str(int(world.money)), text_font, "grey100", (125, 40))
+    draw_center_text("WAVE %s"%(level), text_wave, "grey100", (1, 0), (0, 30))
     draw_center_text("Highest Wave : %s"%(high_wave), text_high_wave, "grey100", (1, 0), (0, 90))
-    draw_text("ENEMY : %s"%(sum(ENEMY_SPAWN_DATA[level-1].values())-tracker.killed), text_enemy, "grey100", (60, 120))
+    draw_center_text("Difficulty : %.1f"%(difficulty), text_high_wave, "grey100", (1, 0), (0, 125))
+    draw_text("ENEMY : %s"%(sum(ENEMY_SPAWN_DATA[(level-1)%c.TOTAL_LEVEL].values())-tracker.killed), text_enemy, "grey100", (60, 120))
 
 def create_turret(pos, choosing_turret, turret_name):
     mouse_tile_x = pos[0] // c.TILE_SIZE
@@ -224,10 +225,7 @@ while run:
             if world.health <= 0:
                 game_over = True
                 game_outcome = -1 # lost
-            # check if player is win
-            if world.level > c.TOTAL_LEVEL:
-                game_over = True
-                game_outcome = 1 # win
+                tracker.reset()
 
             enemy_group.update(world)
             turret_group.update(enemy_group, world)
@@ -247,7 +245,7 @@ while run:
     for turret in turret_group:
         turret.draw(screen)
 
-    display_data(tracker, world.level)
+    display_data(tracker, world.level, world.difficulty)
 
     if out_of_menu:
         if not game_over:
@@ -269,7 +267,7 @@ while run:
                 if pygame.time.get_ticks() - last_enemy_spawn > c.SPAWN_COOLDOWN / world.game_speed:
                     if world.spawned_enemy < len(world.enemy_list):
                         enemy_type = world.enemy_list[world.spawned_enemy]
-                        enemy = Enemy(enemy_type, waypoint, enemy_images, tracker)
+                        enemy = Enemy(enemy_type, waypoint, enemy_images, tracker, world)
                         enemy_group.add(enemy)
                         world.spawned_enemy += 1
                         last_enemy_spawn = pygame.time.get_ticks()
