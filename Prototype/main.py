@@ -8,7 +8,7 @@ from button import Button
 from tracking import TrackingEnemy
 from enemy_data import ENEMY_SPAWN_DATA
 import os
-import sys
+from random import shuffle
 
 # Initialize pygame game
 pygame.init()
@@ -29,6 +29,7 @@ placing_turret = False
 selected_turret = False
 buttoning = False
 out_of_menu = False
+shuffle(c.CHEERUP_TEXT)
 
 # load image
 map_image = pygame.image.load(os.path.join("Prototype", "levels", "map.png"))
@@ -87,6 +88,7 @@ text_enemy = pygame.font.Font("Prototype/assets/fonts/PixelAzureBonds-327Z.ttf",
 text_wave = pygame.font.Font("Prototype/assets/fonts/AncientModernTales-a7Po.ttf", 60)
 text_high_wave = pygame.font.Font("Prototype/assets/fonts/AncientModernTales-a7Po.ttf", 30)
 text_win_or_lose = pygame.font.Font("Prototype/assets/fonts/AncientModernTales-a7Po.ttf", 80)
+text_cheer = pygame.font.Font("Prototype/assets/fonts/ZF2ndPixelus.ttf", 50)
 
 # Load the high score
 def load_high_wave():
@@ -328,6 +330,7 @@ while run:
             if game_outcome == -1:
                 #draw_text("GAME OVER", large_font, "grey0", (rect_x // 2, rect_y // 2))
                 draw_center_text("GAME OVER", text_win_or_lose, "white", (1, 0), (0, rect_y + 100))
+                draw_center_text("%s" %(c.CHEERUP_TEXT[0]), text_cheer, "white", (1, 0), (0, rect_y + 200))
                 if world.level > high_wave:
                     high_wave = world.level
                     save_high_wave(high_wave)

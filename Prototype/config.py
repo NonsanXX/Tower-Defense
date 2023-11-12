@@ -1,3 +1,5 @@
+from random import shuffle
+
 ROWS = 16
 COLS = 30
 TILE_SIZE = 64
@@ -19,3 +21,13 @@ UPGRADE_COST = 250
 LEVEL_COMPLETE_REWARD = 0
 ANIMATION_STEP = 8
 ANIMATION_DELAY = 15
+
+#CHEERUP
+
+CHEERUP_TEXT = [
+    "ตั้งใจเล่นยังอะเรา?",
+    "เล่นแบบนี้ เกมผมกากหรือคุณกาก?",
+    "เม้าพังรึเปล่า?",
+    "...?",
+    "I am the storm that is approaching!"
+]
