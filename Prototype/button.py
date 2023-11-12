@@ -1,12 +1,13 @@
 import pygame
 
 class Button():
-    def __init__(self, x, y, image, single_click):
+    def __init__(self, x, y, image, single_click, click_fx):
         self.image = image
         self.rect = self.image.get_rect()
         self.rect.topleft = (x, y)
         self.clicked = False
         self.single_click = single_click
+        self.click_fx = click_fx
 
     def draw(self, surface):
         # get mouse posi
@@ -19,9 +20,11 @@ class Button():
                 # if was a single_click type
                 if self.single_click:
                     self.clicked = True
+                    self.click_fx.play()
 
         if not pygame.mouse.get_pressed()[0] and self.clicked:
             self.clicked = False
+            self.click_fx.play()
         # draw button on screen
         surface.blit(self.image, self.rect)
 

@@ -3,7 +3,7 @@ from enemy_data import ENEMY_SPAWN_DATA
 from random import shuffle
 import config as c
 class World():
-    def __init__(self, data, map_image):
+    def __init__(self, data, map_image, backg_fx):
         self.level = 1
         self.game_speed = 1
         self.health = c.HEALTH
@@ -16,10 +16,12 @@ class World():
         self.spawned_enemy = 0
         self.killed_enemy = 0
         self.missed_enemy = 0
+        self.backg_fx = backg_fx
 
     def process_data(self):
         #look though data to extract
         for layer in self.level_data["layers"]:
+            self.backg_fx.play()
             if layer["name"] == "field":
                 self.tile_map = layer["data"]
             elif layer["name"] == "waypoints":
