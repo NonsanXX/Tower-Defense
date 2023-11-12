@@ -52,10 +52,11 @@ class Turret(pygame.sprite.Sprite):
     
     def update(self, enemy_group, world):
         if self.target:
-            self.play_animation()
+            self.play_animation(world.game_speed)
         else:
             if pygame.time.get_ticks() - self.last_shot > self.cooldown / world.game_speed:
                 self.pick_target(enemy_group)
+                self.last_shot = pygame.time.get_ticks()
 
     def pick_target(self, enemy_group):
         # find an enemy to target
@@ -78,17 +79,15 @@ class Turret(pygame.sprite.Sprite):
                     self.target.health -= self.damage
                     if self.name != "knight": # AOE attack
                         break
-    def play_animation(self):
+    def play_animation(self, game_speed):
         # update
         self.original_image = self.animaion_list[self.frame_index]
         # check time
-        if pygame.time.get_ticks() - self.update_time > c.ANIMATION_DELAY:
-            self.update_time = pygame.time.get_ticks()
-            self.frame_index += 1
-            if self.frame_index >= len(self.animaion_list):
-                self.frame_index = 0
-                self.last_shot = pygame.time.get_ticks()
-                self.target = None
+        self.update_time = pygame.time.get_ticks()
+        self.frame_index += game_speed
+        if self.frame_index >= len(self.animaion_list):
+            self.frame_index = 0
+            self.target = None
 
     def upgrade(self):
         self.upgrade_level += 1
