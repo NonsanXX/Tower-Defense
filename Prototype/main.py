@@ -391,9 +391,9 @@ while run:
                     selected_turret = select_turret(mouse_pos)
         if not out_of_menu:
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP:
+                if event.key == pygame.K_UP or event.key == pygame.K_w:
                     selected_option = (selected_option - 1) % len(menu_options)
-                elif event.key == pygame.K_DOWN:
+                elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
                     selected_option = (selected_option + 1) % len(menu_options)
                 elif event.key == pygame.K_RETURN:
                     # Perform action based on the selected option

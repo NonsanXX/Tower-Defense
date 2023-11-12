@@ -25,9 +25,12 @@ ANIMATION_DELAY = 15
 #CHEERUP
 
 CHEERUP_TEXT = [
-    "ตั้งใจเล่นยังอะเรา?",
-    "เล่นแบบนี้ เกมผมกากหรือคุณกาก?",
-    "เม้าพังรึเปล่า?",
+    "ไม่เป็นไร เอาใหม่นะ",
+    "ผมเข้าใจ เน็ต Ping ใช่มั้ยล่ะ?",
+    "เม้าส์คุณพังรึเปล่า?",
     "...?",
-    "I am the storm that is approaching!"
+    "I am the storm that is approaching!",
+    "E-JUDGE is strongest foe.",
+    "No Context.",
+    "¿Por qué traducir?"
 ]
