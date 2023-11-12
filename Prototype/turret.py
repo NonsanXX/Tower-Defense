@@ -20,7 +20,7 @@ class Turret(pygame.sprite.Sprite):
         self.tile_y = tile_y
         # calc center coor
         self.x = (tile_x+0.5) * c.TILE_SIZE
-        self.y = (tile_y+0.5) * c.TILE_SIZE-50
+        self.y = (tile_y+0.5) * c.TILE_SIZE - 25
 
         # animation var
         self.sprite_sheets = sprite_sheets
@@ -46,7 +46,7 @@ class Turret(pygame.sprite.Sprite):
 
     def load_image(self, sprite_sheet):
         # to extract image from spritesheet
-        animation_list = [pygame.transform.scale(frame, (225, 225)) for frame in sprite_sheet]
+        animation_list = [pygame.transform.scale(frame, (130, 130)) for frame in sprite_sheet]
         
         return animation_list
     
