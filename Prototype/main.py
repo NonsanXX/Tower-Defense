@@ -345,20 +345,21 @@ while run:
                         create_turret(mouse_pos, select[0], select[1])
                 else:
                     selected_turret = select_turret(mouse_pos)
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP:
-                selected_option = (selected_option - 1) % len(menu_options)
-            elif event.key == pygame.K_DOWN:
-                selected_option = (selected_option + 1) % len(menu_options)
-            elif event.key == pygame.K_RETURN:
-                # Perform action based on the selected option
-                if selected_option == 0:
-                    print("Start Game")
-                    out_of_menu = True
-                    # Add code to start the game here
-                elif selected_option == 1:
-                    print("Quit")
-                    run = False
+        if not out_of_menu:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    selected_option = (selected_option - 1) % len(menu_options)
+                elif event.key == pygame.K_DOWN:
+                    selected_option = (selected_option + 1) % len(menu_options)
+                elif event.key == pygame.K_RETURN:
+                    # Perform action based on the selected option
+                    if selected_option == 0:
+                        print("Start Game")
+                        out_of_menu = True
+                        # Add code to start the game here
+                    elif selected_option == 1:
+                        print("Quit")
+                        run = False
     if not out_of_menu:
         draw_menu()
     pygame.display.update()
