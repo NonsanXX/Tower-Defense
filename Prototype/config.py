@@ -32,5 +32,5 @@ CHEERUP_TEXT = [
     "I am the storm that is approaching!",
     "E-JUDGE is strongest foe.",
     "No Context.",
-    "¿Por qué traducir?"
+    "Por qué traducir?"
 ]
