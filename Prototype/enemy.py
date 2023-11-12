@@ -14,7 +14,7 @@ class Enemy(pygame.sprite.Sprite):
         self.reward = ENEMY_DATA[enemy_type]["reward"]
 
         self.angle = 0
-        self.original_image = images[enemy_type]
+        self.original_image = pygame.transform.scale(images[enemy_type], (180, 180))
         self.image = pygame.transform.rotate(self.original_image, self.angle)
         self.rect = self.image.get_rect()
         self.rect.center = self.pos
