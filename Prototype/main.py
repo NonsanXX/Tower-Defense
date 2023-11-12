@@ -79,7 +79,7 @@ with open(os.path.join("Prototype", "levels", "level.tmj")) as file:
 
 # load font for displaing text in screen
 text_font = pygame.font.SysFont("Consolas", 58, bold = True)
-large_font = pygame.font.SysFont("Consolas", 48)
+large_font = pygame.font.Font("Prototype/assets/fonts/AncientModernTales-a7Po.ttf", 60)
 
 # function for text on screen
 def draw_text(text, font, color, coor):
