@@ -80,8 +80,10 @@ with open(os.path.join("Prototype", "levels", "level.tmj")) as file:
 
 # load font for displaing text in screen
 text_font = pygame.font.Font("Prototype/assets/fonts/PixelAzureBonds-327Z.ttf", 50)
+text_enemy = pygame.font.Font("Prototype/assets/fonts/PixelAzureBonds-327Z.ttf", 30)
 text_wave = pygame.font.Font("Prototype/assets/fonts/AncientModernTales-a7Po.ttf", 60)
 text_win_or_lose = pygame.font.Font("Prototype/assets/fonts/AncientModernTales-a7Po.ttf", 80)
+
 
 # function for text on screen
 def draw_text(text, font, color, coor):
@@ -99,7 +101,7 @@ def display_data(enemy_group):
     screen.blit(coin_gui, (10, 10))
     draw_text(str(world.money), text_font, "grey100", (125, 40))
     draw_center_text("WAVE %s"%(world.level), text_wave, "grey100", (1, 0), (0, 30))
-    draw_text("AMOUNT : %s"%(len(enemy_group)), text_font, "grey100", (60, 60))
+    draw_text("ENEMY : %s"%(len(enemy_group)), text_enemy, "grey100", (60, 120))
 
 def create_turret(pos, choosing_turret, turret_name):
     mouse_tile_x = pos[0] // c.TILE_SIZE
