@@ -282,7 +282,7 @@ while run:
             draw_center_text("GAME OVER", large_font, "grey0", (1, 0), (0, rect_y + 100))
             #draw_center_text("WAVE %s"%(world.level), large_font, "grey100", (1, 0), (0, 10))
         if game_outcome == 1:
-            draw_text("YOU WIN!", large_font, "grey0", (315, 230))
+            draw_center_text("YOU WIN!", large_font, "grey0", (1, 0), (0, rect_y + 100))
         
         # restart level
         if restart_button.draw(screen):
