@@ -7,6 +7,7 @@ FPS = 60
 HEALTH = 100
 MONEY = 400
 TOTAL_LEVEL = 15
+SCORE_FILE = "highscore.txt"
 
 # Enemy const
 SPAWN_COOLDOWN = 1200

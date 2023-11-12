@@ -6,6 +6,7 @@ from world import World
 from turret import Turret
 from button import Button
 import os
+import sys
 
 # Initialize pygame game
 pygame.init()
@@ -82,7 +83,25 @@ with open(os.path.join("Prototype", "levels", "level.tmj")) as file:
 text_font = pygame.font.Font("Prototype/assets/fonts/PixelAzureBonds-327Z.ttf", 50)
 text_enemy = pygame.font.Font("Prototype/assets/fonts/PixelAzureBonds-327Z.ttf", 30)
 text_wave = pygame.font.Font("Prototype/assets/fonts/AncientModernTales-a7Po.ttf", 60)
+text_high_wave = pygame.font.Font("Prototype/assets/fonts/AncientModernTales-a7Po.ttf", 30)
 text_win_or_lose = pygame.font.Font("Prototype/assets/fonts/AncientModernTales-a7Po.ttf", 80)
+
+# Load the high score
+def load_high_wave():
+    if os.path.exists(c.SCORE_FILE):
+        with open(c.SCORE_FILE, 'r') as file:
+            try:
+                high_score = int(file.read())
+            except ValueError:
+                high_score = 0
+    else:
+        high_score = 0
+    return high_score
+
+# Save the high score
+def save_high_wave(score):
+    with open(c.SCORE_FILE, 'w') as file:
+        file.write(str(score))
 
 
 # function for text on screen
@@ -101,6 +120,7 @@ def display_data(enemy_group):
     screen.blit(coin_gui, (10, 10))
     draw_text(str(world.money), text_font, "grey100", (125, 40))
     draw_center_text("WAVE %s"%(world.level), text_wave, "grey100", (1, 0), (0, 30))
+    draw_center_text("Highest Wave : %s"%(high_wave), text_high_wave, "grey100", (1, 0), (0, 90))
     draw_text("ENEMY : %s"%(len(enemy_group)), text_enemy, "grey100", (60, 120))
 
 def create_turret(pos, choosing_turret, turret_name):
@@ -186,6 +206,7 @@ elf_selector = Button(c.SCREEN_WIDTH/2+50, c.SCREEN_HEIGHT-100, pygame.transform
 ignore = [cancel_button, upgrade_button, begin_button, fast_forward_cancel_button, fast_forward_x3_button, fast_forward_x5_button, witch_selector, knight_selector, elf_selector]
 
 run = True
+high_wave = load_high_wave()
 
 while run:
     clock.tick(c.FPS)
@@ -302,10 +323,13 @@ while run:
             pygame.draw.rect(screen, "black", (rect_x, rect_y, rect_width, rect_height), border_radius=30)
             if game_outcome == -1:
                 #draw_text("GAME OVER", large_font, "grey0", (rect_x // 2, rect_y // 2))
-                draw_center_text("GAME OVER", text_win_or_lose, "grey0", (1, 0), (0, rect_y + 100))
+                draw_center_text("GAME OVER", text_win_or_lose, "white", (1, 0), (0, rect_y + 100))
+                if world.level > high_wave:
+                    high_wave = world.level
+                    save_high_wave(high_wave)
                 #draw_center_text("WAVE %s"%(world.level), large_font, "grey100", (1, 0), (0, 10))
-            if game_outcome == 1:
-                draw_center_text("YOU WIN!", text_win_or_lose, "grey0", (1, 0), (0, rect_y + 100))
+            #if game_outcome == 1:
+            #    draw_center_text("YOU WIN!", text_win_or_lose, "grey0", (1, 0), (0, rect_y + 100))
             
             # restart level
             if restart_button.draw(screen):
