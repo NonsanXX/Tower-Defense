@@ -35,6 +35,7 @@ game_paused_tmp = 1
 
 # load image
 map_image = pygame.image.load(os.path.join("Prototype", "levels", "map.png"))
+wallpaper = pygame.image.load(os.path.join("Prototype", "assets", "images", "gui", "Wallpaper.png"))
 cancel_turret_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "cancel.png")), (99, 99))
 upgrade_turret_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "upgrade_turret.png")), (250, 250))
 begin_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "begin.png")), (250, 250))
@@ -170,17 +171,16 @@ def nondeselect(ignore):
             return True
 
 #create menu
-white = (255, 255, 255)
-black = (0, 0, 0)
 
 menu_options = ["Start Game", "Quit"]
 selected_option = 0
 
 def draw_menu():
-    screen.fill(black)
+    screen.fill("black")
+    screen.blit(wallpaper, wallpaper.get_rect())
     for i, option in enumerate(menu_options):
-        text = text_font.render(option, True, white if i == selected_option else (150, 150, 150))
-        text_rect = text.get_rect(center=(c.SCREEN_WIDTH // 2, c.SCREEN_HEIGHT // 2 + i * 50))
+        text = text_font.render(option, True, "white" if i == selected_option else (150, 150, 150))
+        text_rect = text.get_rect(center=(c.SCREEN_WIDTH // 2, c.SCREEN_HEIGHT // 2 + (i+1) * 100))
         screen.blit(text, text_rect)
 
 
@@ -346,6 +346,7 @@ while run:
                 game_paused = False
                 current_fast_forward_type = 1
                 game_outcome = 0
+                game_paused_tmp = 1
                 last_enemy_spawn = pygame.time.get_ticks()
                 
                 #reset world
@@ -361,7 +362,7 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
-        if event.type == pygame.KEYDOWN:
+        if event.type == pygame.KEYDOWN and out_of_menu:
             if event.key == pygame.K_ESCAPE and game_outcome != -1:
                 if game_paused_tmp % 2 == 0:
                     game_outcome = 0
@@ -399,6 +400,8 @@ while run:
                         # Add code to start the game here
                     elif selected_option == 1:
                         run = False
+                elif event.key == pygame.K_ESCAPE:
+                    run = False
     if not out_of_menu:
         draw_menu()
     pygame.display.update()
