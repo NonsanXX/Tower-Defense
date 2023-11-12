@@ -220,9 +220,9 @@ waypoint = world.waypoint
 cancel_button = Button(c.SCREEN_WIDTH/2-250, c.SCREEN_HEIGHT-100, cancel_turret_image, True)
 upgrade_button = Button(c.SCREEN_WIDTH - 300, c.SCREEN_HEIGHT-200, upgrade_turret_image, True)
 begin_button = Button(c.SCREEN_WIDTH - 250, -30, begin_image, True)
-fast_forward_cancel_button = Button(c.SCREEN_WIDTH/2+150, 10, fast_forward_cancel_image, True)
-fast_forward_x3_button = Button(c.SCREEN_WIDTH/2+250, 10, fast_forward_x3_image, True)
-fast_forward_x5_button = Button(c.SCREEN_WIDTH/2+350, 10, fast_forward_x5_image, True)
+fast_forward_cancel_button = Button(c.SCREEN_WIDTH/2+610, 10, fast_forward_cancel_image, True)
+fast_forward_x3_button = Button(c.SCREEN_WIDTH/2+730, 10, fast_forward_x3_image, True)
+fast_forward_x5_button = Button(c.SCREEN_WIDTH/2+850, 10, fast_forward_x5_image, True)
 
 #paused ui
 restart_button = Button(760, 550, restart_image, True)
@@ -421,6 +421,13 @@ while run:
                     if placing_turret:
                         placing_turret = False
                 game_paused_tmp += 1
+            if pygame.time.get_ticks() - time_begin > 100: # Check if delta time is greater than 100ms
+                if event.key == pygame.K_1:
+                    current_fast_forward_type = 1
+                if event.key == pygame.K_2:
+                    current_fast_forward_type = 3
+                if event.key == pygame.K_3:
+                    current_fast_forward_type = 5
         if nondeselect(ignore):
             buttoning = True
         else:
