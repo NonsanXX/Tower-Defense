@@ -359,7 +359,7 @@ while run:
                 elif selected_option == 1:
                     print("Quit")
                     run = False
-    else:
+    if not out_of_menu:
         draw_menu()
     pygame.display.update()
 pygame.quit()
