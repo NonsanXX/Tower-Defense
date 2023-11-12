@@ -22,7 +22,7 @@ pygame.display.set_caption("WOTD")
 is_fast_forward = False
 current_fast_forward_type = 1
 game_over = False
-game_outcome = 0 # -1 lost and 1 is win
+game_outcome = 0 # -1 lost and 1 is pause
 level_started = False
 last_enemy_spawn = pygame.time.get_ticks()
 placing_turret = False
@@ -30,6 +30,8 @@ selected_turret = False
 buttoning = False
 out_of_menu = False
 shuffle(c.CHEERUP_TEXT)
+game_paused = False
+game_paused_tmp = 1
 
 # load image
 map_image = pygame.image.load(os.path.join("Prototype", "levels", "map.png"))
@@ -117,15 +119,16 @@ def draw_center_text(text, font, color, eneble, coor):
     img_rect = img.get_rect(center=(c.SCREEN_WIDTH/2, c.SCREEN_HEIGHT/2))
     screen.blit(img, (img_rect.x*eneble[0]+coor[0], img_rect.y*eneble[1]+coor[1]))
 
-def display_data(tracker, level):
+def display_data(tracker, level, difficulty):
     #display data
     screen.blit(heart_gui, (10, c.SCREEN_HEIGHT-115))
     draw_text(str(world.health), text_font, "grey100", (125, c.SCREEN_HEIGHT-80))
     screen.blit(coin_gui, (10, 10))
-    draw_text(str(world.money), text_font, "grey100", (125, 40))
-    draw_center_text("WAVE %s"%(world.level), text_wave, "grey100", (1, 0), (0, 30))
+    draw_text(str(int(world.money)), text_font, "grey100", (125, 40))
+    draw_center_text("WAVE %s"%(level), text_wave, "grey100", (1, 0), (0, 30))
     draw_center_text("Highest Wave : %s"%(high_wave), text_high_wave, "grey100", (1, 0), (0, 90))
-    draw_text("ENEMY : %s"%(sum(ENEMY_SPAWN_DATA[level-1].values())-tracker.killed), text_enemy, "grey100", (60, 120))
+    draw_center_text("Difficulty : %.1f"%(difficulty), text_high_wave, "grey100", (1, 0), (0, 125))
+    draw_text("ENEMY : %s"%(sum(ENEMY_SPAWN_DATA[(level-1)%c.TOTAL_LEVEL].values())-tracker.killed), text_enemy, "grey100", (60, 120))
 
 def create_turret(pos, choosing_turret, turret_name):
     mouse_tile_x = pos[0] // c.TILE_SIZE
@@ -226,10 +229,7 @@ while run:
             if world.health <= 0:
                 game_over = True
                 game_outcome = -1 # lost
-            # check if player is win
-            if world.level > c.TOTAL_LEVEL:
-                game_over = True
-                game_outcome = 1 # win
+                tracker.reset()
 
             enemy_group.update(world)
             turret_group.update(enemy_group, world)
@@ -249,10 +249,10 @@ while run:
     for turret in turret_group:
         turret.draw(screen)
 
-    display_data(tracker, world.level)
+    display_data(tracker, world.level, world.difficulty)
 
     if out_of_menu:
-        if not game_over:
+        if not game_over and not game_paused:
             # check if level started
             if not level_started:
                 time_begin = pygame.time.get_ticks()
@@ -271,7 +271,7 @@ while run:
                 if pygame.time.get_ticks() - last_enemy_spawn > c.SPAWN_COOLDOWN / world.game_speed:
                     if world.spawned_enemy < len(world.enemy_list):
                         enemy_type = world.enemy_list[world.spawned_enemy]
-                        enemy = Enemy(enemy_type, waypoint, enemy_images, tracker)
+                        enemy = Enemy(enemy_type, waypoint, enemy_images, tracker, world)
                         enemy_group.add(enemy)
                         world.spawned_enemy += 1
                         last_enemy_spawn = pygame.time.get_ticks()
@@ -334,16 +334,17 @@ while run:
                 if world.level > high_wave:
                     high_wave = world.level
                     save_high_wave(high_wave)
-                #draw_center_text("WAVE %s"%(world.level), large_font, "grey100", (1, 0), (0, 10))
-            #if game_outcome == 1:
-            #    draw_center_text("YOU WIN!", text_win_or_lose, "grey0", (1, 0), (0, rect_y + 100))
-            
+            elif game_outcome == 1:
+                draw_center_text("PAUSED", text_win_or_lose, "white", (1, 0), (0, rect_y + 100))
+                current_fast_forward_type = 0
             # restart level
             if restart_button.draw(screen):
                 game_over = False
                 level_started = False
                 placing_turret = False
                 selected_turret = None
+                game_paused = False
+                current_fast_forward_type = 1
                 last_enemy_spawn = pygame.time.get_ticks()
                 
                 #reset world
@@ -361,7 +362,14 @@ while run:
             run = False
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
-                run = False
+                if game_paused_tmp % 2 == 0:
+                    game_outcome = 0
+                    game_paused = False
+                    current_fast_forward_type = 1
+                else:
+                    game_outcome = 1
+                    game_paused = True
+                game_paused_tmp += 1
         if nondeselect(ignore):
             buttoning = True
         else:
@@ -387,11 +395,9 @@ while run:
                 elif event.key == pygame.K_RETURN:
                     # Perform action based on the selected option
                     if selected_option == 0:
-                        print("Start Game")
                         out_of_menu = True
                         # Add code to start the game here
                     elif selected_option == 1:
-                        print("Quit")
                         run = False
     if not out_of_menu:
         draw_menu()

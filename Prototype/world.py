@@ -5,6 +5,7 @@ import config as c
 class World():
     def __init__(self, data, map_image):
         self.level = 1
+        self.difficulty = 1
         self.game_speed = 1
         self.health = c.HEALTH
         self.money = c.MONEY
@@ -34,6 +35,8 @@ class World():
 
     def check_level_complete(self):
         if self.killed_enemy + self.missed_enemy == len(self.enemy_list):
+            if not self.level % c.TOTAL_LEVEL:
+                self.difficulty += 0.5
             return True
 
     def reset_level(self):
@@ -47,7 +50,7 @@ class World():
         surface.blit(self.image, (0,0))
 
     def process_enemy(self):
-        enemies = ENEMY_SPAWN_DATA[self.level - 1]
+        enemies = ENEMY_SPAWN_DATA[(self.level - 1)%c.TOTAL_LEVEL]
         for enemy_type in enemies:
             enemies_to_spawn = enemies[enemy_type]
             self.enemy_list.extend([enemy_type]*enemies_to_spawn)            
