@@ -54,5 +54,3 @@ class World():
 
         # shuffle list
         shuffle(self.enemy_list)
-
-        
