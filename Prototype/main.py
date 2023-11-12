@@ -22,13 +22,15 @@ pygame.display.set_caption("WOTD")
 is_fast_forward = False
 current_fast_forward_type = 1
 game_over = False
-game_outcome = 0 # -1 lost and 1 is win
+game_outcome = 0 # -1 lost and 1 is pause
 level_started = False
 last_enemy_spawn = pygame.time.get_ticks()
 placing_turret = False
 selected_turret = False
 buttoning = False
 out_of_menu = False
+game_paused = False
+game_paused_tmp = 1
 
 # load image
 map_image = pygame.image.load(os.path.join("Prototype", "levels", "map.png"))
@@ -248,7 +250,7 @@ while run:
     display_data(tracker, world.level, world.difficulty)
 
     if out_of_menu:
-        if not game_over:
+        if not game_over and not game_paused:
             # check if level started
             if not level_started:
                 time_begin = pygame.time.get_ticks()
@@ -329,16 +331,17 @@ while run:
                 if world.level > high_wave:
                     high_wave = world.level
                     save_high_wave(high_wave)
-                #draw_center_text("WAVE %s"%(world.level), large_font, "grey100", (1, 0), (0, 10))
-            #if game_outcome == 1:
-            #    draw_center_text("YOU WIN!", text_win_or_lose, "grey0", (1, 0), (0, rect_y + 100))
-            
+            elif game_outcome == 1:
+                draw_center_text("PAUSED", text_win_or_lose, "white", (1, 0), (0, rect_y + 100))
+                current_fast_forward_type = 0
             # restart level
             if restart_button.draw(screen):
                 game_over = False
                 level_started = False
                 placing_turret = False
                 selected_turret = None
+                game_paused = False
+                current_fast_forward_type = 1
                 last_enemy_spawn = pygame.time.get_ticks()
                 
                 #reset world
@@ -356,7 +359,14 @@ while run:
             run = False
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
-                run = False
+                if game_paused_tmp % 2 == 0:
+                    game_outcome = 0
+                    game_paused = False
+                    current_fast_forward_type = 1
+                else:
+                    game_outcome = 1
+                    game_paused = True
+                game_paused_tmp += 1
         if nondeselect(ignore):
             buttoning = True
         else:
@@ -382,11 +392,9 @@ while run:
                 elif event.key == pygame.K_RETURN:
                     # Perform action based on the selected option
                     if selected_option == 0:
-                        print("Start Game")
                         out_of_menu = True
                         # Add code to start the game here
                     elif selected_option == 1:
-                        print("Quit")
                         run = False
     if not out_of_menu:
         draw_menu()
