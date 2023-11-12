@@ -193,6 +193,7 @@ while run:
     #####################
     # DRAW SECTION
     #####################
+    pygame.Surface.fill(screen, "Black")
     world.draw(screen)
 
     # draw group of enemies
@@ -254,7 +255,7 @@ while run:
             cursor_turret = pygame.transform.scale(select[0][0][0], (200, 200))
             cursor_rect = cursor_turret.get_rect()
             cursor_pos = pygame.mouse.get_pos()
-            cursor_rect.center = (cursor_pos[0], cursor_pos[1] - 60)
+            cursor_rect.center = (cursor_pos[0], cursor_pos[1] - 30)
             screen.blit(cursor_turret, cursor_rect)
             if cancel_button.draw(screen):
                 placing_turret = False
