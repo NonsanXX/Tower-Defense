@@ -37,8 +37,8 @@ fast_forward_x3_image = pygame.transform.scale(pygame.image.load(os.path.join("P
 fast_forward_x5_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "FFW_X5.png")), (99, 99))
 
 # load gui
-coin_gui = pygame.image.load(os.path.join("Prototype", "assets", "images", "gui", "coin.png"))
-heart_gui = pygame.image.load(os.path.join("Prototype", "assets", "images", "gui", "heart.png"))
+coin_gui = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "gui", "coin.png")), (120, 120))
+heart_gui = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "gui", "heart.png")), (120, 120))
 logo_gui = pygame.image.load(os.path.join("Prototype", "assets", "images", "gui", "logo.png"))
 
 #load sound
@@ -77,7 +77,7 @@ with open(os.path.join("Prototype", "levels", "level.tmj")) as file:
     world_data = json.load(file)
 
 # load font for displaing text in screen
-text_font = pygame.font.SysFont("Consolas", 24, bold = True)
+text_font = pygame.font.SysFont("Consolas", 58, bold = True)
 large_font = pygame.font.SysFont("Consolas", 48)
 
 # function for text on screen
@@ -91,10 +91,10 @@ def draw_center_text(text, font, color, eneble, coor):
 
 def display_data():
     #display data
-    screen.blit(heart_gui, (10, c.SCREEN_HEIGHT-50))
-    draw_text(str(world.health), text_font, "grey100", (60, c.SCREEN_HEIGHT-45))
+    screen.blit(heart_gui, (10, c.SCREEN_HEIGHT-115))
+    draw_text(str(world.health), text_font, "grey100", (125, c.SCREEN_HEIGHT-80))
     screen.blit(coin_gui, (10, 10))
-    draw_text(str(world.money), text_font, "grey100", (60, 15))
+    draw_text(str(world.money), text_font, "grey100", (125, 40))
 
     draw_center_text("WAVE %s"%(world.level), large_font, "grey100", (1, 0), (0, 10))
 
