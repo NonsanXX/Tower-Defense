@@ -78,8 +78,9 @@ with open(os.path.join("Prototype", "levels", "level.tmj")) as file:
     world_data = json.load(file)
 
 # load font for displaing text in screen
-text_font = pygame.font.SysFont("Consolas", 58, bold = True)
-large_font = pygame.font.Font.bold("Prototype/assets/fonts/AncientModernTales-a7Po.ttf", 60)
+text_font = pygame.font.Font("Prototype/assets/fonts/PixelAzureBonds-327Z.ttf", 50)
+text_wave = pygame.font.Font("Prototype/assets/fonts/AncientModernTales-a7Po.ttf", 60)
+text_win_or_lose = pygame.font.Font("Prototype/assets/fonts/AncientModernTales-a7Po.ttf", 80)
 
 # function for text on screen
 def draw_text(text, font, color, coor):
@@ -97,7 +98,7 @@ def display_data():
     screen.blit(coin_gui, (10, 10))
     draw_text(str(world.money), text_font, "grey100", (125, 40))
 
-    draw_center_text("WAVE %s"%(world.level), large_font, "grey100", (1, 0), (0, 10))
+    draw_center_text("WAVE %s"%(world.level), text_wave, "grey100", (1, 0), (0, 10))
 
 def create_turret(pos, choosing_turret, turret_name):
     mouse_tile_x = pos[0] // c.TILE_SIZE
@@ -266,7 +267,7 @@ while run:
             # check if turret can be upgraded
             if selected_turret.upgrade_level < c.TURRET_LEVEL:
                 # show cost of an upgrade button
-                draw_text(str(c.UPGRADE_COST), large_font, "grey100", (c.SCREEN_WIDTH - 200, c.SCREEN_HEIGHT - 200))
+                draw_text(str(c.UPGRADE_COST), text_font, "grey100", (c.SCREEN_WIDTH - 200, c.SCREEN_HEIGHT - 200))
                 screen.blit(coin_gui_up, (c.SCREEN_WIDTH - 300, c.SCREEN_HEIGHT - 220))
                 if upgrade_button.draw(screen):
                     if world.money >= c.UPGRADE_COST:
@@ -278,13 +279,13 @@ while run:
         rect_x = (c.SCREEN_WIDTH - rect_width) // 2
         rect_y = (c.SCREEN_HEIGHT - rect_height) // 2
 
-        pygame.draw.rect(screen, "dodgerblue", (rect_x, rect_y, rect_width, rect_height), border_radius=30)
+        pygame.draw.rect(screen, "black", (rect_x, rect_y, rect_width, rect_height), border_radius=30)
         if game_outcome == -1:
             #draw_text("GAME OVER", large_font, "grey0", (rect_x // 2, rect_y // 2))
-            draw_center_text("GAME OVER", large_font, "grey0", (1, 0), (0, rect_y + 100))
+            draw_center_text("GAME OVER", text_win_or_lose, "grey0", (1, 0), (0, rect_y + 100))
             #draw_center_text("WAVE %s"%(world.level), large_font, "grey100", (1, 0), (0, 10))
         if game_outcome == 1:
-            draw_center_text("YOU WIN!", large_font, "grey0", (1, 0), (0, rect_y + 100))
+            draw_center_text("YOU WIN!", text_win_or_lose, "grey0", (1, 0), (0, rect_y + 100))
         
         # restart level
         if restart_button.draw(screen):
