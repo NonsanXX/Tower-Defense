@@ -13,7 +13,7 @@ class Turret(pygame.sprite.Sprite):
         self.damage = TURRETS_DATA[self.name][self.upgrade_level - 1]["damage"]
         self.volume = 0.25
         self.shot_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", name, "1.wav"))
-        self.last_shot = pygame.time.get_ticks()
+        self.last_shot = 0
         self.selected = False
         self.target = None
 
