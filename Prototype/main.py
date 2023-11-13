@@ -64,7 +64,7 @@ wallpaper_only = pygame.image.load(os.path.join("Prototype", "assets", "images",
 click_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "button.wav"))
 button_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "turret.wav"))
 backg_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "bg.wav"))
-backg_fx.set_volume(0.05)
+backg_fx.set_volume(2)
 upgrade_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "upgrade.wav"))
 cancel_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "cancel.wav"))
 start_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "start.wav"))
@@ -186,7 +186,7 @@ def nondeselect(ignore):
             return True
 
 #create menu
-menu_options = ["Start Game", "Credits", "Quit"]
+menu_options = ["Start Game", "Options", "Credits", "Quit"]
 credit_person = ["ผู้สร้าง", "66070305 ภูริภัทร อรุณไพศาล", "66070162 ภูมิภูริดล วงค์จันทร์", "66070153 ภาคิน ปานสุข", "66070166 มนนทกร ขุนสุวรรณ"]
 selected_option = 0
 
@@ -195,7 +195,7 @@ def draw_menu():
     screen.blit(wallpaper, wallpaper.get_rect())
     for i, option in enumerate(menu_options):
         text = load_font("pixel", 50).render(option, True, "white" if i == selected_option else (150, 150, 150))
-        text_rect = text.get_rect(center=(c.SCREEN_WIDTH // 2, c.SCREEN_HEIGHT // 2 + (i+1) * 100))
+        text_rect = text.get_rect(center=(c.SCREEN_WIDTH // 2, c.SCREEN_HEIGHT // 2 + (i+0.5) * 100))
         screen.blit(text, text_rect)
     draw_center_text("Highest Wave : %s"%(high_wave), load_font("ancient", 80), "grey100", (1, 0), (0, c.SCREEN_WIDTH // 2))
 
@@ -214,7 +214,7 @@ enemy_group = pygame.sprite.Group()
 turret_group = pygame.sprite.Group()
 
 #create world
-world = World(world_data, map_image, backg_fx)
+world = World(world_data, map_image)
 world.process_data()
 world.process_enemy()
 
@@ -257,7 +257,7 @@ def reset_world():
     last_enemy_spawn = pygame.time.get_ticks()
 
     # reset world
-    world = World(world_data, map_image, backg_fx)
+    world = World(world_data, map_image)
     world.process_data()
     world.process_enemy()
 
@@ -267,6 +267,7 @@ def reset_world():
 
 run = True
 high_wave = load_high_wave()
+backg_fx.play()
 
 while run:
     clock.tick(c.FPS)
@@ -447,9 +448,9 @@ while run:
                     if selected_option == 0:
                         out_of_menu = True
                         game_paused_tmp = 1
-                    elif selected_option == 1:
-                        is_in_credit = True
                     elif selected_option == 2:
+                        is_in_credit = True
+                    elif selected_option == 3:
                         run = False
                 elif event.key == pygame.K_ESCAPE and is_in_credit:
                     is_in_credit = False
