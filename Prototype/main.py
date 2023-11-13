@@ -44,11 +44,17 @@ logo_gui = pygame.image.load(os.path.join("Prototype", "assets", "images", "gui"
 
 #load sound
 shot_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "elf", "yorn.wav"))
+shot_fx.set_volume(0.5)
 arrow_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "elf", "Arrow01.wav"))
+arrow_fx.set_volume(0.5)
 coss_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "elf", "crossbow02.wav"))
+coss_fx.set_volume(0.5)
 knight1_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "knight", "1.wav"))
+knight1_fx.set_volume(0.5)
 knight2_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "knight", "2.wav"))
+knight2_fx.set_volume(0.5)
 knight3_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "knight", "3.wav"))
+knight3_fx.set_volume(0.5)
 witch1_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "witch", "1.wav"))
 witch1_fx.set_volume(0.5)
 witch2_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "witch", "2.wav"))
@@ -56,8 +62,12 @@ witch2_fx.set_volume(0.25)
 witch3_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "witch", "3.wav"))
 witch3_fx.set_volume(0.5)
 click_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "button.wav"))
-backg_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "song.wav"))
-backg_fx.set_volume(0.1)
+button_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "turret.wav"))
+backg_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "bg.wav"))
+backg_fx.set_volume(0.05)
+upgrade_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "upgrade.wav"))
+cancel_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "cancel.wav"))
+start_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "start.wav"))
 # enemy
 enemy_images = {
     "weak" : pygame.image.load(os.path.join("Prototype", "assets", "images", "enemies", "enemy_1.png")),
@@ -164,18 +174,18 @@ world.process_enemy()
 waypoint = world.waypoint
 
 # create button
-cancel_button = Button(c.SCREEN_WIDTH/2-250, c.SCREEN_HEIGHT-100, cancel_turret_image, True, click_fx)
-upgrade_button = Button(c.SCREEN_WIDTH - 300, c.SCREEN_HEIGHT-200, upgrade_turret_image, True, click_fx)
-begin_button = Button(c.SCREEN_WIDTH - 250, -30, begin_image, True, click_fx)
-restart_button = Button(820, 500, restart_image, True, click_fx)
-fast_forward_cancel_button = Button(c.SCREEN_WIDTH/2+150, 10, fast_forward_cancel_image, True, click_fx)
-fast_forward_x3_button = Button(c.SCREEN_WIDTH/2+250, 10, fast_forward_x3_image, True, click_fx)
-fast_forward_x5_button = Button(c.SCREEN_WIDTH/2+350, 10, fast_forward_x5_image, True, click_fx)
+cancel_button = Button(c.SCREEN_WIDTH/2-250, c.SCREEN_HEIGHT-100, cancel_turret_image, True, click_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
+upgrade_button = Button(c.SCREEN_WIDTH - 300, c.SCREEN_HEIGHT-200, upgrade_turret_image, True, click_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
+begin_button = Button(c.SCREEN_WIDTH - 250, -30, begin_image, True, click_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
+restart_button = Button(820, 500, restart_image, True, click_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
+fast_forward_cancel_button = Button(c.SCREEN_WIDTH/2+150, 10, fast_forward_cancel_image, True, click_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
+fast_forward_x3_button = Button(c.SCREEN_WIDTH/2+250, 10, fast_forward_x3_image, True, click_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
+fast_forward_x5_button = Button(c.SCREEN_WIDTH/2+350, 10, fast_forward_x5_image, True, click_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
 
 # Draw Slot for selector
-witch_selector = Button(c.SCREEN_WIDTH/2-150, c.SCREEN_HEIGHT-100, pygame.transform.scale(witch_spreadsheet[0][0], (99, 99)), True, click_fx)
-knight_selector = Button(c.SCREEN_WIDTH/2-50, c.SCREEN_HEIGHT-100, pygame.transform.scale(knight_spreadsheet[0][0], (99, 99)), True, click_fx)
-elf_selector = Button(c.SCREEN_WIDTH/2+50, c.SCREEN_HEIGHT-100, pygame.transform.scale(elf_spreadsheet[0][0], (99, 99)), True, click_fx)
+witch_selector = Button(c.SCREEN_WIDTH/2-150, c.SCREEN_HEIGHT-100, pygame.transform.scale(witch_spreadsheet[0][0], (99, 99)), True, button_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
+knight_selector = Button(c.SCREEN_WIDTH/2-50, c.SCREEN_HEIGHT-100, pygame.transform.scale(knight_spreadsheet[0][0], (99, 99)), True, button_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
+elf_selector = Button(c.SCREEN_WIDTH/2+50, c.SCREEN_HEIGHT-100, pygame.transform.scale(elf_spreadsheet[0][0], (99, 99)), True, button_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
 
 # No other action done when mouse is hover over button
 ignore = [cancel_button, upgrade_button, begin_button, fast_forward_cancel_button, fast_forward_x3_button, fast_forward_x5_button, witch_selector, knight_selector, elf_selector]
