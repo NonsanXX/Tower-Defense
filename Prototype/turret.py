@@ -100,7 +100,7 @@ class Turret(pygame.sprite.Sprite):
         self.shot_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", self.name, "%s.wav"%self.upgrade_level))
         # update turret image
         self.animaion_list = self.load_image(self.sprite_sheets[self.upgrade_level - 1])
-        self.original_image = self.animaion_list[self.frame_index]
+        self.original_image = self.animaion_list[0]
 
         # update range circle
         self.range_image = pygame.Surface((self.range*2, self.range*2))
