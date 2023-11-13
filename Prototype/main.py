@@ -239,19 +239,19 @@ world.process_enemy()
 waypoint = world.waypoint
 
 # create button
-demolish_button = Button(c.SCREEN_WIDTH - 300, c.SCREEN_HEIGHT-300, demolish_turret_image, True)
+demolish_button = Button(c.SCREEN_WIDTH - 300, c.SCREEN_HEIGHT-300, demolish_turret_image, True, click_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
 cancel_button = Button(c.SCREEN_WIDTH/2-250, c.SCREEN_HEIGHT-100, cancel_turret_image, True, click_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
 upgrade_button = Button(c.SCREEN_WIDTH - 300, c.SCREEN_HEIGHT-200, upgrade_turret_image, True, click_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
 begin_button = Button(c.SCREEN_WIDTH - 250, -30, begin_image, True, click_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
 restart_button = Button(820, 500, restart_image, True, click_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
-fast_forward_cancel_button = Button(c.SCREEN_WIDTH/2+150, 10, fast_forward_cancel_image, True, click_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
-fast_forward_x3_button = Button(c.SCREEN_WIDTH/2+250, 10, fast_forward_x3_image, True, click_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
-fast_forward_x5_button = Button(c.SCREEN_WIDTH/2+350, 10, fast_forward_x5_image, True, click_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
+fast_forward_cancel_button = Button(c.SCREEN_WIDTH/2+610, 10, fast_forward_cancel_image, True, click_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
+fast_forward_x3_button = Button(c.SCREEN_WIDTH/2+730, 10, fast_forward_x3_image, True, click_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
+fast_forward_x5_button = Button(c.SCREEN_WIDTH/2+850, 10, fast_forward_x5_image, True, click_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
 
 #paused ui
-restart_button = Button(760, 550, restart_image, True)
-home_button = Button(910, 545, home_image, True)
-exit_paused_button = Button(1070, 555, exit_image, True)
+restart_button = Button(760, 550, restart_image, True, click_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
+home_button = Button(910, 545, home_image, True, click_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
+exit_paused_button = Button(1070, 555, exit_image, True, click_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
 
 
 # Draw Slot for selector
