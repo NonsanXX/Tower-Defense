@@ -8,6 +8,7 @@ from button import Button
 from enemy_data import ENEMY_SPAWN_DATA
 import os
 from random import shuffle
+from sfx import SFX
 
 # Initialize pygame game
 pygame.init()
@@ -37,7 +38,7 @@ is_in_credit = False
 map_image = pygame.image.load(os.path.join("Prototype", "levels", "map.png"))
 cancel_turret_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "cancel.png")), (99, 99))
 upgrade_turret_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "upgrade_turret.png")), (250, 250))
-demolish_turret_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "Demolish_button.png")), (250, 61))
+demolish_turret_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "Demolish_button.png")), (100, 100))
 begin_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "begin.png")), (250, 250))
 restart_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "restart.png")), (100, 100))
 fast_forward_cancel_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "FFW_cancel.png")), (99, 99))
@@ -59,15 +60,6 @@ coin_gui_up = pygame.transform.scale(pygame.image.load(os.path.join("Prototype",
 heart_gui = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "gui", "heart.png")), (60, 60))
 wallpaper = pygame.image.load(os.path.join("Prototype", "assets", "images", "gui", "Wallpaper.png"))
 wallpaper_only = pygame.image.load(os.path.join("Prototype", "assets", "images", "gui", "Wallpaper_only.png"))
-
-#load sound
-click_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "button.wav"))
-button_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "turret.wav"))
-backg_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "bg.wav"))
-backg_fx.set_volume(2)
-upgrade_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "upgrade.wav"))
-cancel_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "cancel.wav"))
-start_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "start.wav"))
 
 # enemy
 enemy_images = {
@@ -221,25 +213,25 @@ world.process_enemy()
 waypoint = world.waypoint
 
 # create button
-demolish_button = Button(c.SCREEN_WIDTH - 300, c.SCREEN_HEIGHT-300, demolish_turret_image, True, click_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
-cancel_button = Button(c.SCREEN_WIDTH/2-250, c.SCREEN_HEIGHT-100, cancel_turret_image, True, click_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
-upgrade_button = Button(c.SCREEN_WIDTH - 300, c.SCREEN_HEIGHT-200, upgrade_turret_image, True, click_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
-begin_button = Button(c.SCREEN_WIDTH - 250, -30, begin_image, True, click_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
-restart_button = Button(820, 500, restart_image, True, click_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
-fast_forward_cancel_button = Button(c.SCREEN_WIDTH/2+610, 10, fast_forward_cancel_image, True, click_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
-fast_forward_x3_button = Button(c.SCREEN_WIDTH/2+730, 10, fast_forward_x3_image, True, click_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
-fast_forward_x5_button = Button(c.SCREEN_WIDTH/2+850, 10, fast_forward_x5_image, True, click_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
+demolish_button = Button(c.SCREEN_WIDTH-150, c.SCREEN_HEIGHT-300, demolish_turret_image, True,)
+cancel_button = Button(c.SCREEN_WIDTH/2-250, c.SCREEN_HEIGHT-100, cancel_turret_image, True,)
+upgrade_button = Button(c.SCREEN_WIDTH - 300, c.SCREEN_HEIGHT-200, upgrade_turret_image, True,)
+begin_button = Button(c.SCREEN_WIDTH - 250, -30, begin_image, True,)
+restart_button = Button(820, 500, restart_image, True,)
+fast_forward_cancel_button = Button(c.SCREEN_WIDTH/2+610, 10, fast_forward_cancel_image, True,)
+fast_forward_x3_button = Button(c.SCREEN_WIDTH/2+730, 10, fast_forward_x3_image, True,)
+fast_forward_x5_button = Button(c.SCREEN_WIDTH/2+850, 10, fast_forward_x5_image, True,)
 
 #paused ui
-restart_button = Button(760, 550, restart_image, True, click_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
-home_button = Button(910, 545, home_image, True, click_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
-exit_paused_button = Button(1070, 555, exit_image, True, click_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
+restart_button = Button(760, 550, restart_image, True,)
+home_button = Button(910, 545, home_image, True,)
+exit_paused_button = Button(1070, 555, exit_image, True,)
 
 
 # Draw Slot for selector
-witch_selector = Button(c.SCREEN_WIDTH/2-150, c.SCREEN_HEIGHT-100, pygame.transform.scale(witch_spreadsheet[0][0], (99, 99)), True, button_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
-knight_selector = Button(c.SCREEN_WIDTH/2-50, c.SCREEN_HEIGHT-100, pygame.transform.scale(knight_spreadsheet[0][0], (99, 99)), True, button_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
-elf_selector = Button(c.SCREEN_WIDTH/2+50, c.SCREEN_HEIGHT-100, pygame.transform.scale(elf_spreadsheet[0][0], (99, 99)), True, button_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
+witch_selector = Button(c.SCREEN_WIDTH/2-150, c.SCREEN_HEIGHT-100, pygame.transform.scale(witch_spreadsheet[0][0], (99, 99)), True)
+knight_selector = Button(c.SCREEN_WIDTH/2-50, c.SCREEN_HEIGHT-100, pygame.transform.scale(knight_spreadsheet[0][0], (99, 99)), True)
+elf_selector = Button(c.SCREEN_WIDTH/2+50, c.SCREEN_HEIGHT-100, pygame.transform.scale(elf_spreadsheet[0][0], (99, 99)), True)
 
 # No other action done when mouse is hover over button
 ignore = [cancel_button, upgrade_button, demolish_button, begin_button, fast_forward_cancel_button, fast_forward_x3_button, fast_forward_x5_button, witch_selector, knight_selector, elf_selector]
@@ -267,7 +259,14 @@ def reset_world():
 
 run = True
 high_wave = load_high_wave()
-backg_fx.play()
+
+#load background music
+#### MUST BE 16-bit WAV ####
+pygame.mixer.music.load('Prototype/assets/audio/bg_music.mp3')
+
+#run background music
+pygame.mixer.music.set_volume(c.MUSIC_VOLUME)
+pygame.mixer.music.play(-1) # -1 mean infinite loop
 
 while run:
     clock.tick(c.FPS)
@@ -310,6 +309,7 @@ while run:
                 time_begin = pygame.time.get_ticks()
                 if begin_button.draw(screen):
                     level_started = True
+                    SFX.play_fx("start_fx")
             else:
                 # Fast forward option
                 if pygame.time.get_ticks() - time_begin > 100: # Check if delta time is greater than 100ms
@@ -441,8 +441,10 @@ while run:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP or event.key == pygame.K_w:
                     selected_option = (selected_option - 1) % len(menu_options)
+                    SFX.play_fx("menu_select")
                 elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
                     selected_option = (selected_option + 1) % len(menu_options)
+                    SFX.play_fx("menu_select")
                 elif event.key == pygame.K_RETURN:
                     # Perform action based on the selected option
                     if selected_option == 0:
@@ -452,10 +454,12 @@ while run:
                         is_in_credit = True
                     elif selected_option == 3:
                         run = False
+                    SFX.play_fx("menu_enter")
                 elif event.key == pygame.K_ESCAPE and is_in_credit:
                     is_in_credit = False
                 elif event.key == pygame.K_ESCAPE:
                     run = False
+                
     if not out_of_menu:
         draw_menu()
         if is_in_credit:
