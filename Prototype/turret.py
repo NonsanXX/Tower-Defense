@@ -3,7 +3,8 @@ import config as c
 from turret_data import TURRETS_DATA
 import math
 class Turret(pygame.sprite.Sprite):
-    def __init__(self, sprite_sheets, tile_x, tile_y, shot_fx, name):
+    def __init__(self, sprite_sheets, tile_x, tile_y, shot_fx, name, arrow_fx, coss_fx, knight1_fx, knight2_fx, knight3_fx,
+                 witch1_fx, witch2_fx, witch3_fx):
         pygame.sprite.Sprite.__init__(self)
         self.upgrade_level = 1
         self.name = name
@@ -12,6 +13,14 @@ class Turret(pygame.sprite.Sprite):
         self.damage = TURRETS_DATA[self.name][self.upgrade_level - 1]["damage"]
         self.last_shot = pygame.time.get_ticks()
         self.shot_fx = shot_fx
+        self.arrow_fx = arrow_fx
+        self.coss_fx = coss_fx
+        self.knight1_fx = knight1_fx
+        self.knight2_fx = knight2_fx
+        self.knight3_fx = knight3_fx
+        self.witch1_fx = witch1_fx
+        self.witch2_fx = witch2_fx
+        self.witch3_fx = witch3_fx
         self.selected = False
         self.target = None
 
@@ -73,8 +82,27 @@ class Turret(pygame.sprite.Sprite):
                     self.angle = math.degrees(math.atan2(-y_dist, x_dist))
 
                     # Play sound
-                    self.shot_fx.play()
-                    
+                    if self.name == "witch":
+                        if self.upgrade_level == 1:
+                            self.witch1_fx.play()
+                        elif self.upgrade_level == 2:
+                            self.witch2_fx.play()
+                        elif self.upgrade_level == 3:
+                            self.witch3_fx.play()
+                    if self.name == "knight":
+                        if self.upgrade_level == 1:
+                            self.knight1_fx.play()
+                        elif self.upgrade_level == 2:
+                            self.knight2_fx.play()
+                        elif self.upgrade_level == 3:
+                            self.knight3_fx.play()
+                    if self.name == "elf":
+                        if self.upgrade_level == 1:
+                            self.arrow_fx.play()
+                        elif self.upgrade_level == 2:
+                            self.coss_fx.play()
+                        elif self.upgrade_level == 3:
+                            self.shot_fx.play()
                     # Damage enemy
                     self.target.health -= self.damage
                     if self.name != "knight": # AOE attack

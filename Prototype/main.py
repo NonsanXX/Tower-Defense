@@ -61,9 +61,31 @@ wallpaper = pygame.image.load(os.path.join("Prototype", "assets", "images", "gui
 wallpaper_only = pygame.image.load(os.path.join("Prototype", "assets", "images", "gui", "Wallpaper_only.png"))
 
 #load sound
-shot_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "shot.wav"))
+shot_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "elf", "yorn.wav"))
 shot_fx.set_volume(0.5)
-
+arrow_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "elf", "Arrow01.wav"))
+arrow_fx.set_volume(0.5)
+coss_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "elf", "crossbow02.wav"))
+coss_fx.set_volume(0.5)
+knight1_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "knight", "1.wav"))
+knight1_fx.set_volume(0.5)
+knight2_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "knight", "2.wav"))
+knight2_fx.set_volume(0.5)
+knight3_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "knight", "3.wav"))
+knight3_fx.set_volume(0.5)
+witch1_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "witch", "1.wav"))
+witch1_fx.set_volume(0.5)
+witch2_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "witch", "2.wav"))
+witch2_fx.set_volume(0.25)
+witch3_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "witch", "3.wav"))
+witch3_fx.set_volume(0.5)
+click_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "button.wav"))
+button_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "turret.wav"))
+backg_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "bg.wav"))
+backg_fx.set_volume(0.05)
+upgrade_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "upgrade.wav"))
+cancel_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "cancel.wav"))
+start_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "start.wav"))
 # enemy
 enemy_images = {
     "weak" : pygame.image.load(os.path.join("Prototype", "assets", "images", "enemies", "enemy_1.png")),
@@ -153,7 +175,8 @@ def create_turret(pos, choosing_turret, turret_name):
             if (mouse_tile_x, mouse_tile_y) == (turret.tile_x, turret.tile_y):
                 space_is_free = False
         if space_is_free:
-            new_turret = Turret(choosing_turret, mouse_tile_x, mouse_tile_y, shot_fx, turret_name)
+            new_turret = Turret(choosing_turret, mouse_tile_x, mouse_tile_y, shot_fx, turret_name, arrow_fx, coss_fx, knight1_fx,
+                                knight2_fx, knight3_fx, witch1_fx, witch2_fx, witch3_fx)
             turret_group.add(new_turret)
 
             # losing money
@@ -209,30 +232,32 @@ enemy_group = pygame.sprite.Group()
 turret_group = pygame.sprite.Group()
 
 #create world
-world = World(world_data, map_image)
+world = World(world_data, map_image, backg_fx)
 world.process_data()
 world.process_enemy()
 
 waypoint = world.waypoint
 
 # create button
-cancel_button = Button(c.SCREEN_WIDTH/2-250, c.SCREEN_HEIGHT-100, cancel_turret_image, True)
-upgrade_button = Button(c.SCREEN_WIDTH - 300, c.SCREEN_HEIGHT-200, upgrade_turret_image, True)
 demolish_button = Button(c.SCREEN_WIDTH - 300, c.SCREEN_HEIGHT-300, demolish_turret_image, True)
-begin_button = Button(c.SCREEN_WIDTH - 250, -30, begin_image, True)
-fast_forward_cancel_button = Button(c.SCREEN_WIDTH/2+610, 10, fast_forward_cancel_image, True)
-fast_forward_x3_button = Button(c.SCREEN_WIDTH/2+730, 10, fast_forward_x3_image, True)
-fast_forward_x5_button = Button(c.SCREEN_WIDTH/2+850, 10, fast_forward_x5_image, True)
+cancel_button = Button(c.SCREEN_WIDTH/2-250, c.SCREEN_HEIGHT-100, cancel_turret_image, True, click_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
+upgrade_button = Button(c.SCREEN_WIDTH - 300, c.SCREEN_HEIGHT-200, upgrade_turret_image, True, click_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
+begin_button = Button(c.SCREEN_WIDTH - 250, -30, begin_image, True, click_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
+restart_button = Button(820, 500, restart_image, True, click_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
+fast_forward_cancel_button = Button(c.SCREEN_WIDTH/2+150, 10, fast_forward_cancel_image, True, click_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
+fast_forward_x3_button = Button(c.SCREEN_WIDTH/2+250, 10, fast_forward_x3_image, True, click_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
+fast_forward_x5_button = Button(c.SCREEN_WIDTH/2+350, 10, fast_forward_x5_image, True, click_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
 
 #paused ui
 restart_button = Button(760, 550, restart_image, True)
 home_button = Button(910, 545, home_image, True)
 exit_paused_button = Button(1070, 555, exit_image, True)
 
+
 # Draw Slot for selector
-witch_selector = Button(c.SCREEN_WIDTH/2-150, c.SCREEN_HEIGHT-100, pygame.transform.scale(witch_spreadsheet[0][0], (99, 99)), True)
-knight_selector = Button(c.SCREEN_WIDTH/2-50, c.SCREEN_HEIGHT-100, pygame.transform.scale(knight_spreadsheet[0][0], (99, 99)), True)
-elf_selector = Button(c.SCREEN_WIDTH/2+50, c.SCREEN_HEIGHT-100, pygame.transform.scale(elf_spreadsheet[0][0], (99, 99)), True)
+witch_selector = Button(c.SCREEN_WIDTH/2-150, c.SCREEN_HEIGHT-100, pygame.transform.scale(witch_spreadsheet[0][0], (99, 99)), True, button_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
+knight_selector = Button(c.SCREEN_WIDTH/2-50, c.SCREEN_HEIGHT-100, pygame.transform.scale(knight_spreadsheet[0][0], (99, 99)), True, button_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
+elf_selector = Button(c.SCREEN_WIDTH/2+50, c.SCREEN_HEIGHT-100, pygame.transform.scale(elf_spreadsheet[0][0], (99, 99)), True, button_fx, button_fx, upgrade_fx, cancel_fx, start_fx)
 
 # No other action done when mouse is hover over button
 ignore = [cancel_button, upgrade_button, demolish_button, begin_button, fast_forward_cancel_button, fast_forward_x3_button, fast_forward_x5_button, witch_selector, knight_selector, elf_selector]
