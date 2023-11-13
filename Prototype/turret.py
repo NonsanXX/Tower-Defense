@@ -1,17 +1,19 @@
 import pygame
 import config as c
+import os
 from turret_data import TURRETS_DATA
 import math
 class Turret(pygame.sprite.Sprite):
-    def __init__(self, sprite_sheets, tile_x, tile_y, shot_fx, name):
+    def __init__(self, sprite_sheets, tile_x, tile_y, name):
         pygame.sprite.Sprite.__init__(self)
         self.upgrade_level = 1
         self.name = name
         self.range = TURRETS_DATA[self.name][self.upgrade_level - 1]["range"]
         self.cooldown = TURRETS_DATA[self.name][self.upgrade_level - 1]["cooldown"]
         self.damage = TURRETS_DATA[self.name][self.upgrade_level - 1]["damage"]
-        self.last_shot = pygame.time.get_ticks()
-        self.shot_fx = shot_fx
+        self.volume = 0.25
+        self.shot_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", name, "1.wav"))
+        self.last_shot = 0
         self.selected = False
         self.target = None
 
@@ -71,10 +73,11 @@ class Turret(pygame.sprite.Sprite):
                 if dist <= self.range:
                     self.target = enemy
                     self.angle = math.degrees(math.atan2(-y_dist, x_dist))
-
                     # Play sound
+
+                    self.shot_fx.set_volume(self.volume)
                     self.shot_fx.play()
-                    
+
                     # Damage enemy
                     self.target.health -= self.damage
                     if self.name != "knight": # AOE attack
@@ -94,10 +97,10 @@ class Turret(pygame.sprite.Sprite):
         self.range = TURRETS_DATA[self.name][self.upgrade_level - 1]["range"]
         self.cooldown = TURRETS_DATA[self.name][self.upgrade_level - 1]["cooldown"]
         self.damage = TURRETS_DATA[self.name][self.upgrade_level - 1]["damage"]
-
+        self.shot_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", self.name, "%s.wav"%self.upgrade_level))
         # update turret image
         self.animaion_list = self.load_image(self.sprite_sheets[self.upgrade_level - 1])
-        self.original_image = self.animaion_list[self.frame_index]
+        self.original_image = self.animaion_list[0]
 
         # update range circle
         self.range_image = pygame.Surface((self.range*2, self.range*2))

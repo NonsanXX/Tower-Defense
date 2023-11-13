@@ -1,10 +1,11 @@
+import os
 TURRETS_DATA = {
     "witch" : [
         {
             #1
             "range" : 170,
             "cooldown" : 2000,
-            "damage" : 30,
+            "damage" : 30
         },
         {
             #2
