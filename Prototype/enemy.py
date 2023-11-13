@@ -3,7 +3,7 @@ from pygame.math import Vector2
 from enemy_data import ENEMY_DATA
 import math
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self, enemy_type, waypoint, images, tracker, world):
+    def __init__(self, enemy_type, waypoint, images, world):
         pygame.sprite.Sprite.__init__(self)
         self.waypoint = waypoint
         self.pos = Vector2(self.waypoint[0])
@@ -18,7 +18,6 @@ class Enemy(pygame.sprite.Sprite):
         self.image = pygame.transform.rotate(self.original_image, self.angle)
         self.rect = self.image.get_rect()
         self.rect.center = self.pos
-        self.tracker = tracker
 
     def update(self, world):
         self.move(world)
@@ -30,7 +29,6 @@ class Enemy(pygame.sprite.Sprite):
         if self.target_waypoint >= len(self.waypoint):
             # if enemy reach the end of the path
             self.kill()
-            self.tracker.count()
             world.health -= self.health
             world.money += self.reward
             world.missed_enemy += 1            
@@ -58,4 +56,3 @@ class Enemy(pygame.sprite.Sprite):
             world.money += self.reward
             world.killed_enemy += 1
             self.kill()
-            self.tracker.count()

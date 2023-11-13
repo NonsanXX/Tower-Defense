@@ -5,7 +5,6 @@ from enemy import Enemy
 from world import World
 from turret import Turret
 from button import Button
-from tracking import TrackingEnemy
 from enemy_data import ENEMY_SPAWN_DATA
 import os
 from random import shuffle
@@ -132,7 +131,7 @@ def draw_center_text(text, font, color, eneble, coor):
     img_rect = img.get_rect(center=(c.SCREEN_WIDTH/2, c.SCREEN_HEIGHT/2))
     screen.blit(img, (img_rect.x*eneble[0]+coor[0], img_rect.y*eneble[1]+coor[1]))
 
-def display_data(tracker, level, difficulty):
+def display_data(killed, level, difficulty):
     #display data
     screen.blit(heart_gui, (20, c.SCREEN_HEIGHT-90))
     draw_text(str(world.health), load_font('pixel', 50), "grey100", (100, c.SCREEN_HEIGHT-90))
@@ -141,8 +140,7 @@ def display_data(tracker, level, difficulty):
     draw_center_text("WAVE %s"%(level), load_font('ancient', 60), "grey100", (1, 0), (0, 30))
     draw_center_text("Highest Wave : %s"%(high_wave), load_font('pixel', 30), "grey100", (1, 0), (0, 90))
     draw_center_text("Difficulty : %.1f"%(difficulty), load_font('pixel', 30), "grey100", (1, 0), (0, 125))
-    draw_text("ENEMY : %s"%(sum(ENEMY_SPAWN_DATA[(level-1)%c.TOTAL_LEVEL].values())-tracker.killed), load_font("pixel", 30), "grey100", (60, 120))
-
+    draw_text("ENEMY : %s"%(sum(ENEMY_SPAWN_DATA[(level-1)%c.TOTAL_LEVEL].values())-killed), load_font("pixel", 30), "grey100", (60, 120))
 def create_turret(pos, choosing_turret, turret_name):
     mouse_tile_x = pos[0] // c.TILE_SIZE
     mouse_tile_y = pos[1] // c.TILE_SIZE
@@ -239,8 +237,6 @@ elf_selector = Button(c.SCREEN_WIDTH/2+50, c.SCREEN_HEIGHT-100, pygame.transform
 # No other action done when mouse is hover over button
 ignore = [cancel_button, upgrade_button, demolish_button, begin_button, fast_forward_cancel_button, fast_forward_x3_button, fast_forward_x5_button, witch_selector, knight_selector, elf_selector]
 
-tracker = TrackingEnemy()
-
 def reset_world():
     global game_over, level_started, placing_turret, selected_turret, game_paused, current_fast_forward_type, game_outcome, game_paused_tmp, last_enemy_spawn, world
     game_over = False
@@ -262,9 +258,6 @@ def reset_world():
     enemy_group.empty()
     turret_group.empty()
 
-    # reset tracker
-    tracker.reset()
-
 run = True
 high_wave = load_high_wave()
 
@@ -281,7 +274,6 @@ while run:
             if world.health <= 0:
                 game_over = True
                 game_outcome = -1 # lost
-                tracker.reset()
 
             enemy_group.update(world)
             turret_group.update(enemy_group, world)
@@ -301,7 +293,7 @@ while run:
     for turret in turret_group:
         turret.draw(screen)
 
-    display_data(tracker, world.level, world.difficulty)
+    display_data(world.killed_enemy+world.missed_enemy, world.level, world.difficulty)
 
     if out_of_menu:
         if not game_over and not game_paused:
@@ -323,7 +315,7 @@ while run:
                 if pygame.time.get_ticks() - last_enemy_spawn > c.SPAWN_COOLDOWN / (world.game_speed*world.difficulty):
                     if world.spawned_enemy < len(world.enemy_list):
                         enemy_type = world.enemy_list[world.spawned_enemy]
-                        enemy = Enemy(enemy_type, waypoint, enemy_images, tracker, world)
+                        enemy = Enemy(enemy_type, waypoint, enemy_images, world)
                         enemy_group.add(enemy)
                         world.spawned_enemy += 1
                         last_enemy_spawn = pygame.time.get_ticks()
@@ -332,7 +324,6 @@ while run:
             if world.check_level_complete():
                 world.money += c.LEVEL_COMPLETE_REWARD
                 world.level += 1
-                tracker.reset()
                 level_started = False
                 last_enemy_spawn = pygame.time.get_ticks()
                 world.reset_level()
