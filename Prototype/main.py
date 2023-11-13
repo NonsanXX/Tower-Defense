@@ -257,7 +257,7 @@ def reset_world():
     last_enemy_spawn = pygame.time.get_ticks()
 
     # reset world
-    world = World(world_data, map_image)
+    world = World(world_data, map_image, backg_fx)
     world.process_data()
     world.process_enemy()
 
