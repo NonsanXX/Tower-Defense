@@ -20,6 +20,7 @@ pygame.display.set_caption("WOTD")
 
 # game variable
 is_fast_forward = False
+time_begin = 0
 current_fast_forward_type = 1
 game_over = False
 game_outcome = 0 # -1 lost and 1 is pause
@@ -33,6 +34,8 @@ shuffle(c.CHEERUP_TEXT)
 game_paused = False
 game_paused_tmp = 1
 is_in_credit = False
+is_show_slot = True
+delay_tmp = 10
 
 # load image
 map_image = pygame.image.load(os.path.join("Prototype", "levels", "map.png"))
@@ -46,6 +49,8 @@ fast_forward_x3_image = pygame.transform.scale(pygame.image.load(os.path.join("P
 fast_forward_x5_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "FFW_X5.png")), (99, 99))
 exit_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "Exit.png")), (100, 100))
 home_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "Home.png")), (100, 100))
+show_slot_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "show_slot.png")), (64, 64))
+hide_slot_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "hide_slot.png")), (64, 64))
 
 #load cursor
 new_cursor = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "gui", "Cursor Pointer.png")), (40, 40))
@@ -60,6 +65,7 @@ coin_gui_up = pygame.transform.scale(pygame.image.load(os.path.join("Prototype",
 heart_gui = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "gui", "heart.png")), (60, 60))
 wallpaper = pygame.image.load(os.path.join("Prototype", "assets", "images", "gui", "Wallpaper.png"))
 wallpaper_only = pygame.image.load(os.path.join("Prototype", "assets", "images", "gui", "Wallpaper_only.png"))
+
 
 # enemy
 enemy_images = {
@@ -168,7 +174,7 @@ def deselect_turret():
         turret.selected = False
 
 def draw_slot(rect):
-    pygame.draw.rect(screen, (217, 217, 217), rect, border_radius=25)
+    pygame.draw.rect(screen, (217, 217, 255, 0), rect, border_radius=25)
     pygame.draw.rect(screen, (0, 0, 0), rect, 2, 25)
 
 def nondeselect(ignore):
@@ -213,8 +219,9 @@ world.process_enemy()
 waypoint = world.waypoint
 
 # create button
-demolish_button = Button(c.SCREEN_WIDTH-150, c.SCREEN_HEIGHT-300, demolish_turret_image, True,)
-cancel_button = Button(c.SCREEN_WIDTH/2-250, c.SCREEN_HEIGHT-100, cancel_turret_image, True,)
+demolish_button = Button(c.SCREEN_WIDTH - 430, c.SCREEN_HEIGHT-150, demolish_turret_image, True,)
+demolish_button_past_max = Button(c.SCREEN_WIDTH-120, c.SCREEN_HEIGHT-150, demolish_turret_image, True,)
+cancel_button = Button(c.SCREEN_WIDTH/2-250, c.SCREEN_HEIGHT-150, cancel_turret_image, True,)
 upgrade_button = Button(c.SCREEN_WIDTH - 300, c.SCREEN_HEIGHT-200, upgrade_turret_image, True,)
 begin_button = Button(c.SCREEN_WIDTH - 250, -30, begin_image, True,)
 restart_button = Button(820, 500, restart_image, True,)
@@ -229,9 +236,11 @@ exit_paused_button = Button(1070, 555, exit_image, True,)
 
 
 # Draw Slot for selector
-witch_selector = Button(c.SCREEN_WIDTH/2-150, c.SCREEN_HEIGHT-100, pygame.transform.scale(witch_spreadsheet[0][0], (99, 99)), True)
-knight_selector = Button(c.SCREEN_WIDTH/2-50, c.SCREEN_HEIGHT-100, pygame.transform.scale(knight_spreadsheet[0][0], (99, 99)), True)
-elf_selector = Button(c.SCREEN_WIDTH/2+50, c.SCREEN_HEIGHT-100, pygame.transform.scale(elf_spreadsheet[0][0], (99, 99)), True)
+witch_selector = Button(c.SCREEN_WIDTH/2-150, c.SCREEN_HEIGHT-120, pygame.transform.scale(witch_spreadsheet[0][0], (99, 99)), True)
+knight_selector = Button(c.SCREEN_WIDTH/2-50, c.SCREEN_HEIGHT-120, pygame.transform.scale(knight_spreadsheet[0][0], (99, 99)), True)
+elf_selector = Button(c.SCREEN_WIDTH/2+50, c.SCREEN_HEIGHT-120, pygame.transform.scale(elf_spreadsheet[0][0], (99, 99)), True)
+show_slot_button = Button(c.SCREEN_WIDTH/2 - 30, c.SCREEN_HEIGHT- 60, show_slot_image, True)
+hide_slot_button = Button(c.SCREEN_WIDTH/2 - 30, c.SCREEN_HEIGHT - 190, hide_slot_image, True)
 
 # No other action done when mouse is hover over button
 ignore = [cancel_button, upgrade_button, demolish_button, begin_button, fast_forward_cancel_button, fast_forward_x3_button, fast_forward_x5_button, witch_selector, knight_selector, elf_selector]
@@ -339,18 +348,28 @@ while run:
 
             # draw button
             # for turret button show cost
-            draw_slot(witch_selector)
-            draw_slot(knight_selector)
-            draw_slot(elf_selector)
-            if witch_selector.draw(screen):
-                placing_turret = True
-                select = (selector["witch"], "witch")
-            if knight_selector.draw(screen):
-                placing_turret = True
-                select = (selector["knight"], "knight")
-            if elf_selector.draw(screen):
-                placing_turret = True
-                select = (selector["elf"], "elf")
+
+            if is_show_slot:
+                if delay_tmp >= 5:
+                    draw_slot(witch_selector)
+                    draw_slot(knight_selector)
+                    draw_slot(elf_selector)
+                    if witch_selector.draw(screen):
+                        placing_turret = True
+                        select = (selector["witch"], "witch")
+                    if knight_selector.draw(screen):
+                        placing_turret = True
+                        select = (selector["knight"], "knight")
+                    if elf_selector.draw(screen):
+                        placing_turret = True
+                        select = (selector["elf"], "elf")
+                    if hide_slot_button.draw(screen):
+                        is_show_slot = False
+                delay_tmp += 1
+            else:
+                if show_slot_button.draw(screen):
+                        is_show_slot = True
+                delay_tmp = 0
             if placing_turret:
                 # show cursor
                 cursor_turret = pygame.transform.scale(select[0][0][0], (99, 99))
@@ -371,6 +390,10 @@ while run:
                             selected_turret.upgrade()
                             world.money -= c.UPGRADE_COST
                     if demolish_button.draw(screen):
+                        selected_turret.kill()
+                        selected_turret = None
+                else:
+                    if demolish_button_past_max.draw(screen):
                         selected_turret.kill()
                         selected_turret = None
         else:
@@ -433,8 +456,11 @@ while run:
                 deselect_turret()
                 if placing_turret:
                     # if have enough money
-                    if world.money >= c.BUY_COST and not buttoning:
-                        create_turret(mouse_pos, select[0], select[1])
+                    if len(turret_group) > c.LIMIT:
+                        SFX.play_fx("denied")
+                    else:
+                        if world.money >= c.BUY_COST and not buttoning:
+                            create_turret(mouse_pos, select[0], select[1])
                 else:
                     selected_turret = select_turret(mouse_pos)
         if not out_of_menu:

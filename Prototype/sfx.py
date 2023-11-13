@@ -13,6 +13,7 @@ class SFX:
         self.start_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "start.wav"))
         self.menu_select = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "menu_select.wav"))
         self.menu_enter = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "menu_enter.wav"))
+        self.denied = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "denied.wav"))
 
     @classmethod
     def play_fx(cls, select):

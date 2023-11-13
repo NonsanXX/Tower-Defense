@@ -35,7 +35,7 @@ TURRETS_DATA = {
         },
         {
             #3
-            "range" : 135,
+            "range" : 150,
             "cooldown" : 1500,
             "damage" : 60
         }
