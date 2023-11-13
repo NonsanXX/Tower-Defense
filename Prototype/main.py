@@ -38,6 +38,7 @@ is_in_credit = False
 map_image = pygame.image.load(os.path.join("Prototype", "levels", "map.png"))
 cancel_turret_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "cancel.png")), (99, 99))
 upgrade_turret_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "upgrade_turret.png")), (250, 250))
+demolish_turret_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "Demolish_button.png")), (250, 61))
 begin_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "begin.png")), (250, 250))
 restart_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "restart.png")), (100, 100))
 fast_forward_cancel_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "FFW_cancel.png")), (99, 99))
@@ -219,6 +220,7 @@ waypoint = world.waypoint
 # create button
 cancel_button = Button(c.SCREEN_WIDTH/2-250, c.SCREEN_HEIGHT-100, cancel_turret_image, True)
 upgrade_button = Button(c.SCREEN_WIDTH - 300, c.SCREEN_HEIGHT-200, upgrade_turret_image, True)
+demolish_button = Button(c.SCREEN_WIDTH - 300, c.SCREEN_HEIGHT-300, demolish_turret_image, True)
 begin_button = Button(c.SCREEN_WIDTH - 250, -30, begin_image, True)
 fast_forward_cancel_button = Button(c.SCREEN_WIDTH/2+610, 10, fast_forward_cancel_image, True)
 fast_forward_x3_button = Button(c.SCREEN_WIDTH/2+730, 10, fast_forward_x3_image, True)
@@ -235,9 +237,33 @@ knight_selector = Button(c.SCREEN_WIDTH/2-50, c.SCREEN_HEIGHT-100, pygame.transf
 elf_selector = Button(c.SCREEN_WIDTH/2+50, c.SCREEN_HEIGHT-100, pygame.transform.scale(elf_spreadsheet[0][0], (99, 99)), True)
 
 # No other action done when mouse is hover over button
-ignore = [cancel_button, upgrade_button, begin_button, fast_forward_cancel_button, fast_forward_x3_button, fast_forward_x5_button, witch_selector, knight_selector, elf_selector]
+ignore = [cancel_button, upgrade_button, demolish_button, begin_button, fast_forward_cancel_button, fast_forward_x3_button, fast_forward_x5_button, witch_selector, knight_selector, elf_selector]
 
 tracker = TrackingEnemy()
+
+def reset_world():
+    global game_over, level_started, placing_turret, selected_turret, game_paused, current_fast_forward_type, game_outcome, game_paused_tmp, last_enemy_spawn, world
+    game_over = False
+    level_started = False
+    placing_turret = False
+    selected_turret = None
+    game_paused = False
+    current_fast_forward_type = 1
+    game_outcome = 0
+    game_paused_tmp = 1
+    last_enemy_spawn = pygame.time.get_ticks()
+
+    # reset world
+    world = World(world_data, map_image)
+    world.process_data()
+    world.process_enemy()
+
+    # empty group
+    enemy_group.empty()
+    turret_group.empty()
+
+    # reset tracker
+    tracker.reset()
 
 run = True
 high_wave = load_high_wave()
@@ -294,7 +320,7 @@ while run:
                     if fast_forward_x5_button.draw(screen):
                         current_fast_forward_type = 5
                 # Spawn enemies
-                if pygame.time.get_ticks() - last_enemy_spawn > c.SPAWN_COOLDOWN / world.game_speed:
+                if pygame.time.get_ticks() - last_enemy_spawn > c.SPAWN_COOLDOWN / (world.game_speed*world.difficulty):
                     if world.spawned_enemy < len(world.enemy_list):
                         enemy_type = world.enemy_list[world.spawned_enemy]
                         enemy = Enemy(enemy_type, waypoint, enemy_images, tracker, world)
@@ -345,6 +371,9 @@ while run:
                         if world.money >= c.UPGRADE_COST:
                             selected_turret.upgrade()
                             world.money -= c.UPGRADE_COST
+                    if demolish_button.draw(screen):
+                        selected_turret.kill()
+                        selected_turret = None
         else:
             rect_width = 800
             rect_height = 400
@@ -364,44 +393,9 @@ while run:
                 #current_fast_forward_type = 0
             # restart level
             if restart_button.draw(screen):
-                game_over = False
-                level_started = False
-                placing_turret = False
-                selected_turret = None
-                game_paused = False
-                current_fast_forward_type = 1
-                game_outcome = 0
-                game_paused_tmp = 1
-                last_enemy_spawn = pygame.time.get_ticks()
-
-                #reset world
-                world = World(world_data, map_image)
-                world.process_data()
-                world.process_enemy()
-
-                #empty group
-                enemy_group.empty()
-                turret_group.empty()
+                reset_world()
             elif home_button.draw(screen):
-                game_over = False
-                level_started = False
-                placing_turret = False
-                selected_turret = None
-                game_paused = False
-                current_fast_forward_type = 1
-                game_outcome = 0
-                game_paused_tmp = 1
-                last_enemy_spawn = pygame.time.get_ticks()
-
-                #reset world
-                world = World(world_data, map_image)
-                world.process_data()
-                world.process_enemy()
-
-                #empty group
-                enemy_group.empty()
-                turret_group.empty()
-                
+                reset_world()
                 out_of_menu = False
             elif exit_paused_button.draw(screen):
                 run = False
