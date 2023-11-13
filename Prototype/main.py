@@ -61,24 +61,6 @@ wallpaper = pygame.image.load(os.path.join("Prototype", "assets", "images", "gui
 wallpaper_only = pygame.image.load(os.path.join("Prototype", "assets", "images", "gui", "Wallpaper_only.png"))
 
 #load sound
-shot_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "elf", "yorn.wav"))
-shot_fx.set_volume(0.5)
-arrow_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "elf", "Arrow01.wav"))
-arrow_fx.set_volume(0.5)
-coss_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "elf", "crossbow02.wav"))
-coss_fx.set_volume(0.5)
-knight1_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "knight", "1.wav"))
-knight1_fx.set_volume(0.5)
-knight2_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "knight", "2.wav"))
-knight2_fx.set_volume(0.5)
-knight3_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "knight", "3.wav"))
-knight3_fx.set_volume(0.5)
-witch1_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "witch", "1.wav"))
-witch1_fx.set_volume(0.5)
-witch2_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "witch", "2.wav"))
-witch2_fx.set_volume(0.25)
-witch3_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "witch", "3.wav"))
-witch3_fx.set_volume(0.5)
 click_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "button.wav"))
 button_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "turret.wav"))
 backg_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "bg.wav"))
@@ -86,6 +68,7 @@ backg_fx.set_volume(0.05)
 upgrade_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "upgrade.wav"))
 cancel_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "cancel.wav"))
 start_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "start.wav"))
+
 # enemy
 enemy_images = {
     "weak" : pygame.image.load(os.path.join("Prototype", "assets", "images", "enemies", "enemy_1.png")),
@@ -175,8 +158,7 @@ def create_turret(pos, choosing_turret, turret_name):
             if (mouse_tile_x, mouse_tile_y) == (turret.tile_x, turret.tile_y):
                 space_is_free = False
         if space_is_free:
-            new_turret = Turret(choosing_turret, mouse_tile_x, mouse_tile_y, shot_fx, turret_name, arrow_fx, coss_fx, knight1_fx,
-                                knight2_fx, knight3_fx, witch1_fx, witch2_fx, witch3_fx)
+            new_turret = Turret(choosing_turret, mouse_tile_x, mouse_tile_y, turret_name)
             turret_group.add(new_turret)
 
             # losing money

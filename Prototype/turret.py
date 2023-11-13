@@ -1,26 +1,19 @@
 import pygame
 import config as c
+import os
 from turret_data import TURRETS_DATA
 import math
 class Turret(pygame.sprite.Sprite):
-    def __init__(self, sprite_sheets, tile_x, tile_y, shot_fx, name, arrow_fx, coss_fx, knight1_fx, knight2_fx, knight3_fx,
-                 witch1_fx, witch2_fx, witch3_fx):
+    def __init__(self, sprite_sheets, tile_x, tile_y, name):
         pygame.sprite.Sprite.__init__(self)
         self.upgrade_level = 1
         self.name = name
         self.range = TURRETS_DATA[self.name][self.upgrade_level - 1]["range"]
         self.cooldown = TURRETS_DATA[self.name][self.upgrade_level - 1]["cooldown"]
         self.damage = TURRETS_DATA[self.name][self.upgrade_level - 1]["damage"]
+        self.volume = 0.25
+        self.shot_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", name, "1.wav"))
         self.last_shot = pygame.time.get_ticks()
-        self.shot_fx = shot_fx
-        self.arrow_fx = arrow_fx
-        self.coss_fx = coss_fx
-        self.knight1_fx = knight1_fx
-        self.knight2_fx = knight2_fx
-        self.knight3_fx = knight3_fx
-        self.witch1_fx = witch1_fx
-        self.witch2_fx = witch2_fx
-        self.witch3_fx = witch3_fx
         self.selected = False
         self.target = None
 
@@ -80,29 +73,11 @@ class Turret(pygame.sprite.Sprite):
                 if dist <= self.range:
                     self.target = enemy
                     self.angle = math.degrees(math.atan2(-y_dist, x_dist))
-
                     # Play sound
-                    if self.name == "witch":
-                        if self.upgrade_level == 1:
-                            self.witch1_fx.play()
-                        elif self.upgrade_level == 2:
-                            self.witch2_fx.play()
-                        elif self.upgrade_level == 3:
-                            self.witch3_fx.play()
-                    if self.name == "knight":
-                        if self.upgrade_level == 1:
-                            self.knight1_fx.play()
-                        elif self.upgrade_level == 2:
-                            self.knight2_fx.play()
-                        elif self.upgrade_level == 3:
-                            self.knight3_fx.play()
-                    if self.name == "elf":
-                        if self.upgrade_level == 1:
-                            self.arrow_fx.play()
-                        elif self.upgrade_level == 2:
-                            self.coss_fx.play()
-                        elif self.upgrade_level == 3:
-                            self.shot_fx.play()
+
+                    self.shot_fx.set_volume(self.volume)
+                    self.shot_fx.play()
+
                     # Damage enemy
                     self.target.health -= self.damage
                     if self.name != "knight": # AOE attack
@@ -122,7 +97,7 @@ class Turret(pygame.sprite.Sprite):
         self.range = TURRETS_DATA[self.name][self.upgrade_level - 1]["range"]
         self.cooldown = TURRETS_DATA[self.name][self.upgrade_level - 1]["cooldown"]
         self.damage = TURRETS_DATA[self.name][self.upgrade_level - 1]["damage"]
-
+        self.shot_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", self.name, "%s.wav"%self.upgrade_level))
         # update turret image
         self.animaion_list = self.load_image(self.sprite_sheets[self.upgrade_level - 1])
         self.original_image = self.animaion_list[self.frame_index]
