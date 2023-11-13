@@ -318,16 +318,20 @@ while run:
                 time_begin = pygame.time.get_ticks()
                 if begin_button.draw(screen):
                     level_started = True
+                    SFX.play_fx("button_fx")
                     SFX.play_fx("start_fx")
             else:
                 # Fast forward option
                 if pygame.time.get_ticks() - time_begin > 100: # Check if delta time is greater than 100ms
                     if fast_forward_cancel_button.draw(screen):
                         current_fast_forward_type = 1
+                        SFX.play_fx("button_fx")
                     if fast_forward_x3_button.draw(screen):
                         current_fast_forward_type = 3
+                        SFX.play_fx("button_fx")
                     if fast_forward_x5_button.draw(screen):
                         current_fast_forward_type = 5
+                        SFX.play_fx("button_fx")
                 # Spawn enemies
                 if pygame.time.get_ticks() - last_enemy_spawn > c.SPAWN_COOLDOWN / (world.game_speed*world.difficulty):
                     if world.spawned_enemy < len(world.enemy_list):
@@ -355,19 +359,24 @@ while run:
                     draw_slot(knight_selector)
                     draw_slot(elf_selector)
                     if witch_selector.draw(screen):
+                        SFX.play_fx("select_turret_fx")
                         placing_turret = True
                         select = (selector["witch"], "witch")
                     if knight_selector.draw(screen):
+                        SFX.play_fx("select_turret_fx")
                         placing_turret = True
                         select = (selector["knight"], "knight")
                     if elf_selector.draw(screen):
+                        SFX.play_fx("select_turret_fx")
                         placing_turret = True
                         select = (selector["elf"], "elf")
                     if hide_slot_button.draw(screen):
+                        SFX.play_fx("button_fx")
                         is_show_slot = False
                 delay_tmp += 1
             else:
                 if show_slot_button.draw(screen):
+                        SFX.play_fx("button_fx")
                         is_show_slot = True
                 delay_tmp = 0
             if placing_turret:
@@ -378,6 +387,7 @@ while run:
                 screen.blit(cursor_turret, cursor_rect)
                 if cancel_button.draw(screen):
                     placing_turret = False
+                    SFX.play_fx("cancel_fx")
             # show upgrade if turret is selected
             if selected_turret:
                 # check if turret can be upgraded
@@ -389,13 +399,16 @@ while run:
                         if world.money >= c.UPGRADE_COST:
                             selected_turret.upgrade()
                             world.money -= c.UPGRADE_COST
+                            SFX.play_fx("upgrade_fx")
                     if demolish_button.draw(screen):
                         selected_turret.kill()
                         selected_turret = None
+                        SFX.play_fx("kill_fx")
                 else:
                     if demolish_button_past_max.draw(screen):
                         selected_turret.kill()
                         selected_turret = None
+                        SFX.play_fx("kill_fx")
         else:
             rect_width = 800
             rect_height = 400
@@ -415,11 +428,14 @@ while run:
                 #current_fast_forward_type = 0
             # restart level
             if restart_button.draw(screen):
+                SFX.play_fx("button_fx")
                 reset_world()
             elif home_button.draw(screen):
+                SFX.play_fx("button_fx")
                 reset_world()
                 out_of_menu = False
             elif exit_paused_button.draw(screen):
+                SFX.play_fx("button_fx")
                 run = False
 
     #event handler
