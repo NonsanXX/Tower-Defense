@@ -15,14 +15,15 @@ class SFX:
         self.menu_enter = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "menu_enter.wav"))
         self.denied = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "denied.wav"))
         self.kill_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "kill.wav"))
+        self.volume_control = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", "volumecontrol.wav"))
 
     @classmethod
-    def play_fx(cls, select):
+    def play_fx(cls, select, volume):
         if cls._instance is None:
             cls._instance = cls()
         sound_effect = getattr(cls._instance, select, None)
         if sound_effect:
-            sound_effect.set_volume(c.EFFECT_VOLUME)
+            sound_effect.set_volume(volume)
             sound_effect.play()
         else:
             print("Sound effect not found")

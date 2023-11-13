@@ -9,6 +9,7 @@ from enemy_data import ENEMY_SPAWN_DATA
 import os
 from random import shuffle
 from sfx import SFX
+from decimal import Decimal
 
 # Initialize pygame game
 pygame.init()
@@ -34,6 +35,7 @@ shuffle(c.CHEERUP_TEXT)
 game_paused = False
 game_paused_tmp = 1
 is_in_credit = False
+is_in_options = False
 is_show_slot = True
 delay_tmp = 10
 
@@ -124,6 +126,24 @@ def save_high_wave(score):
     with open(c.SCORE_FILE, 'w') as file:
         file.write(str(score))
 
+#save new volume in config file
+with open('Prototype/config.py', 'r') as config_file:
+    lines = config_file.readlines()
+
+def save_music_volume(new_volume):
+    for i, line in enumerate(lines):
+        if 'MUSIC_VOLUME' in line:
+            lines[i] = f'MUSIC_VOLUME = {new_volume}\n'
+            break
+    with open('Prototype/config.py', 'w') as config_file:
+        config_file.writelines(lines)
+def save_fx_volume(new_volume):
+    for i, line in enumerate(lines):
+        if 'EFFECT_VOLUME' in line:
+            lines[i] = f'EFFECT_VOLUME = {new_volume}\n'
+            break
+    with open('Prototype/config.py', 'w') as config_file:
+        config_file.writelines(lines)
 
 # function for text on screen
 def draw_text(text, font, color, coor):
@@ -184,6 +204,8 @@ def nondeselect(ignore):
             return True
 
 #create menu
+now_music_volume = c.MUSIC_VOLUME
+now_fx = c.EFFECT_VOLUME
 menu_options = ["Start Game", "Options", "Credits", "Quit"]
 credit_person = ["ผู้สร้าง", "66070305 ภูริภัทร อรุณไพศาล", "66070162 ภูมิภูริดล วงค์จันทร์", "66070153 ภาคิน ปานสุข", "66070166 มนนทกร ขุนสุวรรณ"]
 selected_option = 0
@@ -206,6 +228,14 @@ def draw_credits():
         text_rect = text.get_rect(center=(c.SCREEN_WIDTH // 2, c.SCREEN_HEIGHT // 2 - 500 + (i+1) * 150))
         screen.blit(text, text_rect)
     draw_text("PRESS ESC TO GO BACK", load_font("pixel", 70), "white", (100, 950))
+    
+def draw_options():
+    screen.fill("black")
+    screen.blit(wallpaper_only, wallpaper.get_rect())
+    for i, option in enumerate(setting_options):
+        text = load_font("pixel", 50).render(option, True, "white" if i == selected_option else (150, 150, 150))
+        text_rect = text.get_rect(center=(c.SCREEN_WIDTH // 2, c.SCREEN_HEIGHT // 2 + (i+0.5) * 100))
+        screen.blit(text, text_rect)
 
 #create group
 enemy_group = pygame.sprite.Group()
@@ -483,29 +513,82 @@ while run:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP or event.key == pygame.K_w:
                     selected_option = (selected_option - 1) % len(menu_options)
-                    SFX.play_fx("menu_select")
+                    if not is_in_credit:
+                        SFX.play_fx("menu_select", now_fx)
                 elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
                     selected_option = (selected_option + 1) % len(menu_options)
-                    SFX.play_fx("menu_select")
-                elif event.key == pygame.K_RETURN:
+                    if not is_in_credit:
+                        SFX.play_fx("menu_select", now_fx)
+                elif event.key == pygame.K_RETURN and not is_in_options:
                     # Perform action based on the selected option
                     if selected_option == 0:
                         out_of_menu = True
                         game_paused_tmp = 1
+                    elif selected_option == 1:
+                        is_in_options = True
+                        selected_option = 0
                     elif selected_option == 2:
                         is_in_credit = True
                     elif selected_option == 3:
                         run = False
-                    SFX.play_fx("menu_enter")
+                    SFX.play_fx("menu_enter", now_fx)
+
+                #ออกจากหน้าที่เข้าอยู่
                 elif event.key == pygame.K_ESCAPE and is_in_credit:
                     is_in_credit = False
+                    SFX.play_fx("menu_select", now_fx)
+                elif event.key == pygame.K_ESCAPE and is_in_options:
+                    is_in_options = False
+                    SFX.play_fx("menu_select", now_fx)
                 elif event.key == pygame.K_ESCAPE:
+                    SFX.play_fx("menu_select", now_fx)
                     run = False
-                
+                elif is_in_options:
+                    if selected_option == 0:
+                        if event.key == pygame.K_RIGHT:
+                            if now_music_volume < 1:
+                                now_music_volume = Decimal(str(now_music_volume)) + Decimal('0.1')
+                                SFX.play_fx("volume_control", now_fx)
+                                pygame.mixer.music.set_volume(now_music_volume)
+                            else:
+                                SFX.play_fx("denied", now_fx)
+                        elif event.key == pygame.K_LEFT:
+                            if now_music_volume > 0:
+                                now_music_volume = Decimal(str(now_music_volume)) - Decimal('0.1')
+                                SFX.play_fx("volume_control", now_fx)
+                                pygame.mixer.music.set_volume(now_music_volume)
+                            else:
+                                SFX.play_fx("denied", now_fx)
+                    elif selected_option == 1:
+                        if event.key == pygame.K_RIGHT:
+                            if now_fx < 1:
+                                now_fx = Decimal(str(now_fx)) + Decimal('0.1')
+                                SFX.play_fx("volume_control", now_fx)
+                            else:
+                                SFX.play_fx("denied", now_fx)
+                        elif event.key == pygame.K_LEFT:
+                            if now_fx > 0:
+                                now_fx = Decimal(str(now_fx)) - Decimal('0.1')
+                                SFX.play_fx("volume_control", now_fx)
+                            else:
+                                SFX.play_fx("denied", now_fx)
+                    elif selected_option == 2:
+                        if event.key == pygame.K_RETURN:
+                            save_music_volume(now_music_volume)
+                            save_fx_volume(now_fx)
+                            SFX.play_fx("menu_enter", now_fx)
+                    elif selected_option == 3:
+                        if event.key == pygame.K_RETURN:
+                            is_in_options = False
+                            SFX.play_fx("menu_enter", now_fx)
+                setting_options = ["Music Volume : %.1f" %now_music_volume, "FX Volume : %.1f" % now_fx, "Save", "Back"]
+
     if not out_of_menu:
         draw_menu()
         if is_in_credit:
             draw_credits()
+        if is_in_options:
+            draw_options()
     if not placing_turret:
         new_cursor_rect.center = (cursor_pos[0], cursor_pos[1] + 15)
         screen.blit(new_cursor, new_cursor_rect)
