@@ -127,7 +127,7 @@ def save_high_wave(score):
         file.write(str(score))
 
 #save new volume in config file
-with open('Main_Game/config.py', 'r') as config_file:
+with open('Main_Game/config.py', 'r', encoding='utf-8') as config_file:
     lines = config_file.readlines()
 
 def save_music_volume(new_volume):
@@ -135,14 +135,14 @@ def save_music_volume(new_volume):
         if 'MUSIC_VOLUME' in line:
             lines[i] = f'MUSIC_VOLUME = {new_volume}\n'
             break
-    with open('Main_Game/config.py', 'w') as config_file:
+    with open('Main_Game/config.py', 'w', encoding='utf-8') as config_file:
         config_file.writelines(lines)
 def save_fx_volume(new_volume):
     for i, line in enumerate(lines):
         if 'EFFECT_VOLUME' in line:
             lines[i] = f'EFFECT_VOLUME = {new_volume}\n'
             break
-    with open('Main_Game/config.py', 'w') as config_file:
+    with open('Main_Game/config.py', 'w', encoding='utf-8') as config_file:
         config_file.writelines(lines)
 
 # function for text on screen
