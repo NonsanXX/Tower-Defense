@@ -9,8 +9,8 @@ FPS = 60
 HEALTH = 100
 MONEY = 40000
 TOTAL_LEVEL = 15
-SCORE_FILE = "highscore.txt"
-MUSIC_VOLUME = 1
+SCORE_FILE = "Main_Game/highscore.txt"
+MUSIC_VOLUME = 1.0
 EFFECT_VOLUME = 1
 
 # Enemy const
