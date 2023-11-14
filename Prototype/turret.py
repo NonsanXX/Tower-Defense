@@ -56,6 +56,7 @@ class Turret(pygame.sprite.Sprite):
         if self.target:
             self.play_animation(world.game_speed)
         else:
+            self.original_image = self.animaion_list[0]
             if pygame.time.get_ticks() - self.last_shot > self.cooldown / world.game_speed:
                 self.pick_target(enemy_group)
                 self.last_shot = pygame.time.get_ticks()

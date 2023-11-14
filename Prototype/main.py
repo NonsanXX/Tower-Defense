@@ -177,6 +177,7 @@ def create_turret(pos, choosing_turret, turret_name):
                 space_is_free = False
         if space_is_free:
             new_turret = Turret(choosing_turret, mouse_tile_x, mouse_tile_y, turret_name)
+            new_turret.volume = now_fx/4
             turret_group.add(new_turret)
 
             # losing money
