@@ -3,7 +3,7 @@
 ## Requirement
 1. Install pygame with [`pip`](https://pypi.org/project/pygame/)
     + `$ pip install pygame`
-2. `run main.py`
+2. run `main.py`
 
 ## Collaborators
   66070305 ภูริภัทร อรุณไพศาล - Head<br>
