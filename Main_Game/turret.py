@@ -85,7 +85,10 @@ class Turret(pygame.sprite.Sprite):
                         break
     def play_animation(self, game_speed):
         # update
-        self.original_image = self.animaion_list[self.frame_index]
+        try:
+            self.original_image = self.animaion_list[self.frame_index]
+        except IndexError:
+            self.frame_index = 0
         # check time
         self.update_time = pygame.time.get_ticks()
         self.frame_index += game_speed
