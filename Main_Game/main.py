@@ -40,55 +40,55 @@ is_show_slot = True
 delay_tmp = 10
 
 # load image
-map_image = pygame.image.load(os.path.join("Prototype", "levels", "map.png"))
-cancel_turret_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "cancel.png")), (99, 99))
-upgrade_turret_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "upgrade_turret.png")), (250, 250))
-demolish_turret_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "Demolish_button.png")), (100, 100))
-begin_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "begin.png")), (250, 250))
-restart_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "restart.png")), (100, 100))
-fast_forward_cancel_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "FFW_cancel.png")), (99, 99))
-fast_forward_x3_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "FFW_X3.png")), (99, 99))
-fast_forward_x5_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "FFW_X5.png")), (99, 99))
-exit_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "Exit.png")), (100, 100))
-home_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "Home.png")), (100, 100))
-show_slot_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "show_slot.png")), (64, 64))
-hide_slot_image = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "buttons", "hide_slot.png")), (64, 64))
+map_image = pygame.image.load(os.path.join("Main_Game", "levels", "map.png"))
+cancel_turret_image = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "buttons", "cancel.png")), (99, 99))
+upgrade_turret_image = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "buttons", "upgrade_turret.png")), (250, 250))
+demolish_turret_image = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "buttons", "Demolish_button.png")), (100, 100))
+begin_image = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "buttons", "begin.png")), (250, 250))
+restart_image = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "buttons", "restart.png")), (100, 100))
+fast_forward_cancel_image = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "buttons", "FFW_cancel.png")), (99, 99))
+fast_forward_x3_image = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "buttons", "FFW_X3.png")), (99, 99))
+fast_forward_x5_image = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "buttons", "FFW_X5.png")), (99, 99))
+exit_image = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "buttons", "Exit.png")), (100, 100))
+home_image = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "buttons", "Home.png")), (100, 100))
+show_slot_image = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "buttons", "show_slot.png")), (64, 64))
+hide_slot_image = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "buttons", "hide_slot.png")), (64, 64))
 
 #load cursor
-new_cursor = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "gui", "Cursor Pointer.png")), (40, 40))
+new_cursor = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "gui", "Cursor Pointer.png")), (40, 40))
 new_cursor_rect = new_cursor.get_rect()
 
 #hide mouse cursor
 pygame.mouse.set_visible(False)
 
 # load gui
-coin_gui = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "gui", "coin.png")), (70, 70))
-coin_gui_up = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "gui", "coin.png")), (100, 100))
-heart_gui = pygame.transform.scale(pygame.image.load(os.path.join("Prototype", "assets", "images", "gui", "heart.png")), (60, 60))
-wallpaper = pygame.image.load(os.path.join("Prototype", "assets", "images", "gui", "Wallpaper.png"))
-wallpaper_only = pygame.image.load(os.path.join("Prototype", "assets", "images", "gui", "Wallpaper_only.png"))
+coin_gui = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "gui", "coin.png")), (70, 70))
+coin_gui_up = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "gui", "coin.png")), (100, 100))
+heart_gui = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "gui", "heart.png")), (60, 60))
+wallpaper = pygame.image.load(os.path.join("Main_Game", "assets", "images", "gui", "Wallpaper.png"))
+wallpaper_only = pygame.image.load(os.path.join("Main_Game", "assets", "images", "gui", "Wallpaper_only.png"))
 
 
 # enemy
 enemy_images = {
-    "weak" : pygame.image.load(os.path.join("Prototype", "assets", "images", "enemies", "enemy_1.png")),
-    "medium" : pygame.image.load(os.path.join("Prototype", "assets", "images", "enemies", "enemy_2.png")),
-    "strong" : pygame.image.load(os.path.join("Prototype", "assets", "images", "enemies", "enemy_3.png")),
-    "elite" : pygame.image.load(os.path.join("Prototype", "assets", "images", "enemies", "enemy_4.png"))
+    "weak" : pygame.image.load(os.path.join("Main_Game", "assets", "images", "enemies", "enemy_1.png")),
+    "medium" : pygame.image.load(os.path.join("Main_Game", "assets", "images", "enemies", "enemy_2.png")),
+    "strong" : pygame.image.load(os.path.join("Main_Game", "assets", "images", "enemies", "enemy_3.png")),
+    "elite" : pygame.image.load(os.path.join("Main_Game", "assets", "images", "enemies", "enemy_4.png"))
 }
 
-witch_frame = lambda x: len(list(os.scandir(os.path.join("Prototype", "assets", "images", "turrets", "Witch", "Lv%d"%x))))
-knight_frame = lambda x: len(list(os.scandir(os.path.join("Prototype", "assets", "images", "turrets", "Knight", "Lv%d"%x))))
-elf_frame = lambda x: len(list(os.scandir(os.path.join("Prototype", "assets", "images", "turrets", "Elf", "Lv%d"%x))))
+witch_frame = lambda x: len(list(os.scandir(os.path.join("Main_Game", "assets", "images", "turrets", "Witch", "Lv%d"%x))))
+knight_frame = lambda x: len(list(os.scandir(os.path.join("Main_Game", "assets", "images", "turrets", "Knight", "Lv%d"%x))))
+elf_frame = lambda x: len(list(os.scandir(os.path.join("Main_Game", "assets", "images", "turrets", "Elf", "Lv%d"%x))))
 
 # witch tower
-witch_spreadsheet = [[pygame.image.load(os.path.join("Prototype", "assets", "images", "turrets", "Witch", "Lv%d"%level, "Witch%d-%d.png"%(level, frame))) for frame in range(1, witch_frame(level)+1)] for level in range(1, 4)]
+witch_spreadsheet = [[pygame.image.load(os.path.join("Main_Game", "assets", "images", "turrets", "Witch", "Lv%d"%level, "Witch%d-%d.png"%(level, frame))) for frame in range(1, witch_frame(level)+1)] for level in range(1, 4)]
 
 # knight tower
-knight_spreadsheet = [[pygame.image.load(os.path.join("Prototype", "assets", "images", "turrets", "Knight", "Lv%d"%level, "Knight%d-%d.png"%(level, frame))) for frame in range(1, knight_frame(level)+1)] for level in range(1, 4)]
+knight_spreadsheet = [[pygame.image.load(os.path.join("Main_Game", "assets", "images", "turrets", "Knight", "Lv%d"%level, "Knight%d-%d.png"%(level, frame))) for frame in range(1, knight_frame(level)+1)] for level in range(1, 4)]
 
 # elf tower
-elf_spreadsheet = [[pygame.image.load(os.path.join("Prototype", "assets", "images", "turrets", "Elf", "Lv%d"%level, "Elf%d-%d.png"%(level, frame))) for frame in range(1, elf_frame(level)+1)] for level in range(1, 4)]
+elf_spreadsheet = [[pygame.image.load(os.path.join("Main_Game", "assets", "images", "turrets", "Elf", "Lv%d"%level, "Elf%d-%d.png"%(level, frame))) for frame in range(1, elf_frame(level)+1)] for level in range(1, 4)]
 
 selector = {
     "witch" : witch_spreadsheet,
@@ -97,17 +97,17 @@ selector = {
 }
 
 # load json data
-with open(os.path.join("Prototype", "levels", "level.tmj")) as file:
+with open(os.path.join("Main_Game", "levels", "level.tmj")) as file:
     world_data = json.load(file)
 
 # load font for displaing text in screen
 def load_font(font, size):
     if font == 'pixel':
-        return pygame.font.Font("Prototype/assets/fonts/PixelAzureBonds-327Z.ttf", size)
+        return pygame.font.Font("Main_Game/assets/fonts/PixelAzureBonds-327Z.ttf", size)
     elif font == 'ancient':
-        return pygame.font.Font("Prototype/assets/fonts/AncientModernTales-a7Po.ttf", size)
+        return pygame.font.Font("Main_Game/assets/fonts/AncientModernTales-a7Po.ttf", size)
     elif font == 'thai':
-        return pygame.font.Font("Prototype/assets/fonts/ZF2ndPixelus.ttf", size)
+        return pygame.font.Font("Main_Game/assets/fonts/ZF2ndPixelus.ttf", size)
 
 # Load the high score
 def load_high_wave():
@@ -127,7 +127,7 @@ def save_high_wave(score):
         file.write(str(score))
 
 #save new volume in config file
-with open('Prototype/config.py', 'r') as config_file:
+with open('Main_Game/config.py', 'r') as config_file:
     lines = config_file.readlines()
 
 def save_music_volume(new_volume):
@@ -135,14 +135,14 @@ def save_music_volume(new_volume):
         if 'MUSIC_VOLUME' in line:
             lines[i] = f'MUSIC_VOLUME = {new_volume}\n'
             break
-    with open('Prototype/config.py', 'w') as config_file:
+    with open('Main_Game/config.py', 'w') as config_file:
         config_file.writelines(lines)
 def save_fx_volume(new_volume):
     for i, line in enumerate(lines):
         if 'EFFECT_VOLUME' in line:
             lines[i] = f'EFFECT_VOLUME = {new_volume}\n'
             break
-    with open('Prototype/config.py', 'w') as config_file:
+    with open('Main_Game/config.py', 'w') as config_file:
         config_file.writelines(lines)
 
 # function for text on screen
@@ -302,7 +302,7 @@ high_wave = load_high_wave()
 
 #load background music
 #### MUST BE 16-bit WAV ####
-pygame.mixer.music.load('Prototype/assets/audio/bg_music.mp3')
+pygame.mixer.music.load('Main_Game/assets/audio/bg_music.mp3')
 
 #run background music
 pygame.mixer.music.set_volume(c.MUSIC_VOLUME)

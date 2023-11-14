@@ -12,7 +12,7 @@ class Turret(pygame.sprite.Sprite):
         self.cooldown = TURRETS_DATA[self.name][self.upgrade_level - 1]["cooldown"]
         self.damage = TURRETS_DATA[self.name][self.upgrade_level - 1]["damage"]
         self.volume = 0.25
-        self.shot_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", name, "1.wav"))
+        self.shot_fx = pygame.mixer.Sound(os.path.join("Main_Game", "assets", "audio", name, "1.wav"))
         self.last_shot = 0
         self.selected = False
         self.target = None
@@ -98,7 +98,7 @@ class Turret(pygame.sprite.Sprite):
         self.range = TURRETS_DATA[self.name][self.upgrade_level - 1]["range"]
         self.cooldown = TURRETS_DATA[self.name][self.upgrade_level - 1]["cooldown"]
         self.damage = TURRETS_DATA[self.name][self.upgrade_level - 1]["damage"]
-        self.shot_fx = pygame.mixer.Sound(os.path.join("Prototype", "assets", "audio", self.name, "%s.wav"%self.upgrade_level))
+        self.shot_fx = pygame.mixer.Sound(os.path.join("Main_Game", "assets", "audio", self.name, "%s.wav"%self.upgrade_level))
         # update turret image
         self.animaion_list = self.load_image(self.sprite_sheets[self.upgrade_level - 1])
         self.original_image = self.animaion_list[0]
