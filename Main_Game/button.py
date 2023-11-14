@@ -1,5 +1,5 @@
 import pygame
-import config as c
+import config.config as c
 
 class Button():
     def __init__(self, x, y, image, single_click):

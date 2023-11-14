@@ -10,8 +10,8 @@ HEALTH = 100
 MONEY = 40000
 TOTAL_LEVEL = 15
 SCORE_FILE = "Main_Game/highscore.txt"
-MUSIC_VOLUME = 1.0
-EFFECT_VOLUME = 1
+MUSIC_VOLUME_FILE = "Main_Game/config/ms_volume.txt"
+FX_VOLUME_FILE = "Main_Game/config/fx_volume.txt"
 
 # Enemy const
 SPAWN_COOLDOWN = 1200

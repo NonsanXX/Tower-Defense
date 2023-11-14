@@ -1,6 +1,6 @@
 import pygame
 import os
-import config as c
+import config.config as c
 
 class SFX:
     _instance = None  # Class variable to store the instance

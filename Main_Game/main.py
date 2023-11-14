@@ -1,5 +1,5 @@
 import pygame
-import config as c
+import config.config as c
 import json
 from enemy import Enemy
 from world import World
@@ -127,23 +127,54 @@ def save_high_wave(score):
         file.write(str(score))
 
 #save new volume in config file
-with open('Main_Game/config.py', 'r', encoding='utf-8') as config_file:
-    lines = config_file.readlines()
+#with open('Main_Game/config.py', 'r', encoding='utf-8') as config_file:
+    #lines = config_file.readlines()
+def load_music_volume():
+    if os.path.exists(c.MUSIC_VOLUME_FILE):
+        with open(c.MUSIC_VOLUME_FILE, 'r') as file:
+            try:
+                ms_volume = float(file.read())
+            except ValueError:
+                ms_volume = 1
+    else:
+        ms_volume = 1
+    return ms_volume
+
+def load_fx_volume():
+    if os.path.exists(c.FX_VOLUME_FILE):
+        with open(c.FX_VOLUME_FILE, 'r') as file:
+            try:
+                fx_volume = float(file.read())
+            except ValueError:
+                fx_volume = 1
+    else:
+        fx_volume = 1
+    return fx_volume
+
+
+now_music_volume = load_music_volume()
+now_fx = load_fx_volume()
+
 
 def save_music_volume(new_volume):
-    for i, line in enumerate(lines):
+    with open(c.MUSIC_VOLUME_FILE, 'w') as file:
+        file.write(str(new_volume))
+    '''for i, line in enumerate(lines):
         if 'MUSIC_VOLUME' in line:
             lines[i] = f'MUSIC_VOLUME = {new_volume}\n'
             break
     with open('Main_Game/config.py', 'w', encoding='utf-8') as config_file:
-        config_file.writelines(lines)
+        config_file.writelines(lines)'''
 def save_fx_volume(new_volume):
-    for i, line in enumerate(lines):
+    with open(c.FX_VOLUME_FILE, 'w') as file:
+        file.write(str(new_volume))
+    '''for i, line in enumerate(lines):
         if 'EFFECT_VOLUME' in line:
             lines[i] = f'EFFECT_VOLUME = {new_volume}\n'
             break
     with open('Main_Game/config.py', 'w', encoding='utf-8') as config_file:
-        config_file.writelines(lines)
+        config_file.writelines(lines)'''
+    
 
 # function for text on screen
 def draw_text(text, font, color, coor):
@@ -205,8 +236,6 @@ def nondeselect(ignore):
             return True
 
 #create menu
-now_music_volume = c.MUSIC_VOLUME
-now_fx = c.EFFECT_VOLUME
 menu_options = ["Start Game", "Options", "Credits", "Quit"]
 credit_person = ["ผู้สร้าง", "66070305 ภูริภัทร อรุณไพศาล", "66070162 ภูมิภูริดล วงค์จันทร์", "66070153 ภาคิน ปานสุข", "66070166 มนนทกร ขุนสุวรรณ"]
 selected_option = 0
@@ -305,7 +334,7 @@ high_wave = load_high_wave()
 pygame.mixer.music.load('Main_Game/assets/audio/bg_music.mp3')
 
 #run background music
-pygame.mixer.music.set_volume(c.MUSIC_VOLUME)
+pygame.mixer.music.set_volume(now_music_volume)
 pygame.mixer.music.play(-1) # -1 mean infinite loop
 
 while run:

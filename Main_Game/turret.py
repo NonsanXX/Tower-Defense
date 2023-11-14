@@ -1,5 +1,5 @@
 import pygame
-import config as c
+import config.config as c
 import os
 from turret_data import TURRETS_DATA
 import math

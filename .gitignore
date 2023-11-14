@@ -1,3 +1,5 @@
 *.pyc
 .DS_Store
-Main_Game/highscore.txt
+highscore.txt
+fx_volume.txt
+ms_volume.txt
