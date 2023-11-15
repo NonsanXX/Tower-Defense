@@ -16,6 +16,7 @@ class SFX:
         self.denied = pygame.mixer.Sound(os.path.join("Main_Game", "assets", "audio", "denied.wav"))
         self.kill_fx = pygame.mixer.Sound(os.path.join("Main_Game", "assets", "audio", "kill.wav"))
         self.volume_control = pygame.mixer.Sound(os.path.join("Main_Game", "assets", "audio", "volumecontrol.wav"))
+        self.enemy_hit_base = pygame.mixer.Sound(os.path.join("Main_Game", "assets", "audio", "enemy_hit_base.wav"))
 
     @classmethod
     def play_fx(cls, select, volume):

@@ -396,7 +396,7 @@ while run:
                 if pygame.time.get_ticks() - last_enemy_spawn > c.SPAWN_COOLDOWN / (world.game_speed*world.difficulty):
                     if world.spawned_enemy < len(world.enemy_list):
                         enemy_type = world.enemy_list[world.spawned_enemy]
-                        enemy = Enemy(enemy_type, waypoint, enemy_images, world)
+                        enemy = Enemy(enemy_type, waypoint, enemy_images, world, now_fx)
                         enemy_group.add(enemy)
                         world.spawned_enemy += 1
                         last_enemy_spawn = pygame.time.get_ticks()

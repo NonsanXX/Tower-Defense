@@ -2,8 +2,10 @@ import pygame
 from pygame.math import Vector2
 from enemy_data import ENEMY_DATA
 import math
+from sfx import SFX
+
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self, enemy_type, waypoint, images, world):
+    def __init__(self, enemy_type, waypoint, images, world, volume):
         pygame.sprite.Sprite.__init__(self)
         self.waypoint = waypoint
         self.pos = Vector2(self.waypoint[0])
@@ -18,6 +20,8 @@ class Enemy(pygame.sprite.Sprite):
         self.image = pygame.transform.rotate(self.original_image, self.angle)
         self.rect = self.image.get_rect()
         self.rect.center = self.pos
+        
+        self.volume = volume
 
     def update(self, world):
         self.move(world)
@@ -31,7 +35,8 @@ class Enemy(pygame.sprite.Sprite):
             self.kill()
             world.health -= self.health
             world.money += self.reward
-            world.missed_enemy += 1            
+            world.missed_enemy += 1
+            SFX.play_fx("enemy_hit_base", self.volume)
             return
         self.target = Vector2(self.waypoint[self.target_waypoint])
         self.movement = self.target - self.pos
