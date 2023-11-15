@@ -40,41 +40,41 @@ is_show_slot = True
 delay_tmp = 10
 
 # load image
-map_image = pygame.image.load(os.path.join("Main_Game", "levels", "map.png"))
-cancel_turret_image = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "buttons", "cancel.png")), (99, 99))
-upgrade_turret_image = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "buttons", "upgrade_turret.png")), (250, 250))
-demolish_turret_image = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "buttons", "Demolish_button.png")), (100, 100))
-begin_image = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "buttons", "begin.png")), (250, 250))
-restart_image = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "buttons", "restart.png")), (100, 100))
-fast_forward_cancel_image = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "buttons", "FFW_cancel.png")), (99, 99))
-fast_forward_x3_image = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "buttons", "FFW_X3.png")), (99, 99))
-fast_forward_x5_image = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "buttons", "FFW_X5.png")), (99, 99))
-exit_image = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "buttons", "Exit.png")), (100, 100))
-home_image = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "buttons", "Home.png")), (100, 100))
-show_slot_image = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "buttons", "show_slot.png")), (64, 64))
-hide_slot_image = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "buttons", "hide_slot.png")), (64, 64))
+map_image = pygame.image.load(os.path.join("Main_Game", "levels", "map.png")).convert_alpha()
+cancel_turret_image = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "buttons", "cancel.png")), (99, 99)).convert_alpha()
+upgrade_turret_image = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "buttons", "upgrade_turret.png")), (250, 250)).convert_alpha()
+demolish_turret_image = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "buttons", "Demolish_button.png")), (100, 100)).convert_alpha()
+begin_image = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "buttons", "begin.png")), (250, 250)).convert_alpha()
+restart_image = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "buttons", "restart.png")), (100, 100)).convert_alpha()
+fast_forward_cancel_image = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "buttons", "FFW_cancel.png")), (99, 99)).convert_alpha()
+fast_forward_x3_image = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "buttons", "FFW_X3.png")), (99, 99)).convert_alpha()
+fast_forward_x5_image = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "buttons", "FFW_X5.png")), (99, 99)).convert_alpha()
+exit_image = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "buttons", "Exit.png")), (100, 100)).convert_alpha()
+home_image = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "buttons", "Home.png")), (100, 100)).convert_alpha()
+show_slot_image = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "buttons", "show_slot.png")), (64, 64)).convert_alpha()
+hide_slot_image = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "buttons", "hide_slot.png")), (64, 64)).convert_alpha()
 
 #load cursor
-new_cursor = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "gui", "Cursor Pointer.png")), (40, 40))
+new_cursor = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "gui", "Cursor Pointer.png")), (40, 40)).convert_alpha()
 new_cursor_rect = new_cursor.get_rect()
 
 #hide mouse cursor
 pygame.mouse.set_visible(False)
 
 # load gui
-coin_gui = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "gui", "coin.png")), (70, 70))
-coin_gui_up = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "gui", "coin.png")), (100, 100))
-heart_gui = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "gui", "heart.png")), (60, 60))
-wallpaper = pygame.image.load(os.path.join("Main_Game", "assets", "images", "gui", "Wallpaper.png"))
-wallpaper_only = pygame.image.load(os.path.join("Main_Game", "assets", "images", "gui", "Wallpaper_only.png"))
+coin_gui = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "gui", "coin.png")), (70, 70)).convert_alpha()
+coin_gui_up = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "gui", "coin.png")), (100, 100)).convert_alpha()
+heart_gui = pygame.transform.scale(pygame.image.load(os.path.join("Main_Game", "assets", "images", "gui", "heart.png")), (60, 60)).convert_alpha()
+wallpaper = pygame.image.load(os.path.join("Main_Game", "assets", "images", "gui", "Wallpaper.png")).convert_alpha()
+wallpaper_only = pygame.image.load(os.path.join("Main_Game", "assets", "images", "gui", "Wallpaper_only.png")).convert_alpha()
 
 
 # enemy
 enemy_images = {
-    "weak" : pygame.image.load(os.path.join("Main_Game", "assets", "images", "enemies", "enemy_1.png")),
-    "medium" : pygame.image.load(os.path.join("Main_Game", "assets", "images", "enemies", "enemy_2.png")),
-    "strong" : pygame.image.load(os.path.join("Main_Game", "assets", "images", "enemies", "enemy_3.png")),
-    "elite" : pygame.image.load(os.path.join("Main_Game", "assets", "images", "enemies", "enemy_4.png"))
+    "weak" : pygame.image.load(os.path.join("Main_Game", "assets", "images", "enemies", "enemy_1.png")).convert_alpha(),
+    "medium" : pygame.image.load(os.path.join("Main_Game", "assets", "images", "enemies", "enemy_2.png")).convert_alpha(),
+    "strong" : pygame.image.load(os.path.join("Main_Game", "assets", "images", "enemies", "enemy_3.png")).convert_alpha(),
+    "elite" : pygame.image.load(os.path.join("Main_Game", "assets", "images", "enemies", "enemy_4.png")).convert_alpha()
 }
 
 witch_frame = lambda x: len(list(os.scandir(os.path.join("Main_Game", "assets", "images", "turrets", "Witch", "Lv%d"%x))))
@@ -82,13 +82,13 @@ knight_frame = lambda x: len(list(os.scandir(os.path.join("Main_Game", "assets",
 elf_frame = lambda x: len(list(os.scandir(os.path.join("Main_Game", "assets", "images", "turrets", "Elf", "Lv%d"%x))))
 
 # witch tower
-witch_spreadsheet = [[pygame.image.load(os.path.join("Main_Game", "assets", "images", "turrets", "Witch", "Lv%d"%level, "Witch%d-%d.png"%(level, frame))) for frame in range(1, witch_frame(level)+1)] for level in range(1, 4)]
+witch_spreadsheet = [[pygame.image.load(os.path.join("Main_Game", "assets", "images", "turrets", "Witch", "Lv%d"%level, "Witch%d-%d.png"%(level, frame))).convert_alpha() for frame in range(1, witch_frame(level)+1)] for level in range(1, 4)]
 
 # knight tower
-knight_spreadsheet = [[pygame.image.load(os.path.join("Main_Game", "assets", "images", "turrets", "Knight", "Lv%d"%level, "Knight%d-%d.png"%(level, frame))) for frame in range(1, knight_frame(level)+1)] for level in range(1, 4)]
+knight_spreadsheet = [[pygame.image.load(os.path.join("Main_Game", "assets", "images", "turrets", "Knight", "Lv%d"%level, "Knight%d-%d.png"%(level, frame))).convert_alpha() for frame in range(1, knight_frame(level)+1)] for level in range(1, 4)]
 
 # elf tower
-elf_spreadsheet = [[pygame.image.load(os.path.join("Main_Game", "assets", "images", "turrets", "Elf", "Lv%d"%level, "Elf%d-%d.png"%(level, frame))) for frame in range(1, elf_frame(level)+1)] for level in range(1, 4)]
+elf_spreadsheet = [[pygame.image.load(os.path.join("Main_Game", "assets", "images", "turrets", "Elf", "Lv%d"%level, "Elf%d-%d.png"%(level, frame))).convert_alpha() for frame in range(1, elf_frame(level)+1)] for level in range(1, 4)]
 
 selector = {
     "witch" : witch_spreadsheet,
